@@ -1,29 +1,3 @@
-/* Make the topbar always visible */
-/* Fixed topbar */
-.topbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 112px;              /* set an explicit bar height */
-  z-index: 1000;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: White;
-  padding: 0 16px;           /* no vertical padding -> stable height */
-  border-bottom: 2px solid darkgray;
-}
-
-/* Ensure the topbar logo stays small */
-.topbar-logo {
-  height: 100px;
-  width: auto;
-  object-fit: contain;
-}
-
-
 .App {
   height: 100vh;
   display: flex;
