@@ -11,8 +11,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #282c34;
+  background-color: White;
   padding: 0 16px;           /* no vertical padding -> stable height */
+  border-bottom: 2px solid darkgray;
 }
 
 /* Ensure the topbar logo stays small */
@@ -35,10 +36,10 @@
   flex: 1;
   overflow: auto;
 
-  background-color: #282c34;
+  background-color: White;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  color: white;
+  color: Black;
 }
