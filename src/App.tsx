@@ -5,6 +5,7 @@ import Topbar from "./components/Topbar";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Koreskoler from "./pages/Koreskoler";
+import Min_side from "./pages/Min_side";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/koreskoler" element={<Koreskoler />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/min_side" element={<Min_side/>} />
             </Routes>
         </Router>
     );

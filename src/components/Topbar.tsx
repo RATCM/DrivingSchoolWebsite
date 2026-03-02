@@ -15,8 +15,8 @@ function Topbar() {
 
             <div className={"topbar-center"}>
                 <button onClick={() => navigate("/")}>Forside</button>
-                <button onClick={() => navigate("/Køreskoler")}>Køreskoler</button>
-                <button onClick={() => navigate("/")}>Min side</button>
+                <button onClick={() => navigate("/Koreskoler")}>Køreskoler</button>
+                <button onClick={() => navigate("/Min_side")}>Min side</button>
 
             </div>
             <div className={"topbar-right"}>
