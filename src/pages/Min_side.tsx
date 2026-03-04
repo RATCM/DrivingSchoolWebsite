@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import NavigationBox from "../components/Min_side/NavigationBox";
 import "./Min_side.css";
+import MyDrivingSchoolBox from "../components/Min_side/skrivebord/MyDrivingSchoolBox";
+import MyProgressBox from "../components/Min_side/skrivebord/MyProgressBox";
+import MyAppointmentsBox from "../components/Min_side/skrivebord/MyAppointmentsBox";
 
 function Min_Side() {
     const [active, setActive] = useState(0);
@@ -12,9 +15,43 @@ function Min_Side() {
             </div>
 
             <div className="rightCol">
-                <div style={{ background: "white", borderRadius: 28, padding: 24 }}>
-                    Right side content...
-                </div>
+                {/* SKRIVEBORD */}
+                {active === 0 && (
+                    <div className="dashboardLayout">
+
+                        <div className="middleColumn">
+                            <MyDrivingSchoolBox />
+                            <MyProgressBox />
+                        </div>
+
+                        <div className="rightColumn">
+                            <MyAppointmentsBox />
+                        </div>
+
+                    </div>
+                )}
+
+                {/* BOOK */}
+                {active === 1 && (
+                    <div className="contentCard">
+                        Book en køretime content...
+                    </div>
+                )}
+
+                {/* KALENDER */}
+                {active === 2 && (
+                    <div className="contentCard">
+                        Kalender content...
+                    </div>
+                )}
+
+                {/* Indstillinger */}
+                {active === 3 && (
+                    <div className="contentCard">
+                        Indstillinger content...
+                    </div>
+                )}
+
             </div>
         </div>
     );
