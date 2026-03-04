@@ -10,7 +10,7 @@ class StudentModel extends UserModel {
         phone: number,
         drivingSchool: DrivingSchoolModel | null,
     ) {
-    super(name,email,passwordHash,phone,drivingSchool)
+        super(name,email,passwordHash,phone,drivingSchool)
     }
 
 }

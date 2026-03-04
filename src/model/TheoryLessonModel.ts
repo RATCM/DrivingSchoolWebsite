@@ -1,6 +1,6 @@
 import LessonModel from "./LessonModel";
 import InstructorModel from "./InstructorModel";
-import drivingSchoolModel from "./DrivingSchoolModel";
+import DrivingSchoolModel from "./DrivingSchoolModel";
 import StudentModel from "./StudentModel";
 
 class TheoryLessonModel extends LessonModel{
@@ -10,7 +10,7 @@ class TheoryLessonModel extends LessonModel{
     constructor(
         instructor : InstructorModel,
         instructorSignature: string,
-        drivingSchool : drivingSchoolModel,
+        drivingSchool : DrivingSchoolModel,
         price: number,
         date : number,
         students: StudentModel[],
