@@ -13,14 +13,15 @@ function NavigationBox({
         items = [
             "Skrivebord",
             "Book en køretime",
-            "kalender"
+            "Kalender",
+            "Indstillinger"
         ],
         activeIndex = 0,
         onSelect,
     }: navigationProps) {
     return (
         <div className="navigationCard">
-            <h1 className="navigationTitle">{title}</h1>
+
 
             <div className="navigationNav">
                 {items.map((text, idx) => (

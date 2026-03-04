@@ -13,3 +13,20 @@
 .rightCol {
     min-width: 0;
 }
+.dashboardLayout {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 24px;
+}
+
+.middleColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.contentCard {
+    background: white;
+    border-radius: 28px;
+    padding: 24px;
+}
