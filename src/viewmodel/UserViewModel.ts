@@ -7,7 +7,7 @@ type UserViewModel = {
     drivingSchool: string,
 };
 
-function mapUserViewModel(model: UserModel): UserViewModel {
+export function mapUserViewModel(model: UserModel): UserViewModel {
     if (!model.drivingSchool) {
         return {
             name: `${model.name}`,
