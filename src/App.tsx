@@ -3,23 +3,31 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
+
+  const goToMainPage = () => {
+    window.location.href = "/"; // reloads to root
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="App">
+
+        {/* Topbar */}
+        <div className="topbar">
+            <img src={logo} className="topbar-logo" alt="logo" />
+            <button onClick={goToMainPage}>Forside</button>
+            <button onClick={goToMainPage}>Køreskoler</button>
+            <button onClick={goToMainPage}>Min Side</button>
+            <button onClick={goToMainPage}>Log in</button>
+
+        </div>
+
+        {/* Content */}
+        <header className="App-header">
+          <p>
+            This is the start page.
+          </p>
+        </header>
+      </div>
   );
 }
 
