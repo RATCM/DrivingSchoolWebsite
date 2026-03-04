@@ -1,34 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "./App.css";
+import Topbar from "./components/Topbar/Topbar";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Koreskoler from "./pages/Koreskoler";
+import Min_side from "./pages/Min_side";
 
 function App() {
-
-  const goToMainPage = () => {
-    window.location.href = "/"; // reloads to root
-  };
-
-  return (
-      <div className="App">
-
-        {/* Topbar */}
-        <div className="topbar">
-            <img src={logo} className="topbar-logo" alt="logo" />
-            <button onClick={goToMainPage}>Forside</button>
-            <button onClick={goToMainPage}>Køreskoler</button>
-            <button onClick={goToMainPage}>Min Side</button>
-            <button onClick={goToMainPage}>Log in</button>
-
-        </div>
-
-        {/* Content */}
-        <header className="App-header">
-          <p>
-            This is the start page.
-          </p>
-        </header>
-      </div>
-  );
+    return (
+        <Router>
+            <Topbar />
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/koreskoler" element={<Koreskoler />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/min_side" element={<Min_side/>} />
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;

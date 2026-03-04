@@ -1,0 +1,37 @@
+.login-page {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 112px; /* same as topbar height */
+}
+
+.login-box {
+    width: 350px;
+    padding: 40px;
+    background-color: #f3f3f3;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login-input {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.login-button {
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+.login-button:hover {
+    background-color: #333;
+}
