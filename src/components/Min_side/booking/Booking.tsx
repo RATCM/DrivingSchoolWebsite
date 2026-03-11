@@ -14,8 +14,10 @@ function Booking() {
         { value: 'drivingtest', label: 'Køreprøve' }
     ]
     return (
-        <div className="Booking-page">
-            <div className="Booking-box">
+
+        <div className="booking-page">
+            <div className="booking-box">
+                <h1>Book en køretime</h1>
                 <h2>Type</h2>
 
                 <Select options={options} />
@@ -24,21 +26,23 @@ function Booking() {
                 <input
                     type="date"
                     placeholder="Dato"
-                    className="Booking-input"
+                    className="booking-input"
                 />
 
                 <input
                     type="time"
                     placeholder="Tid"
-                    className="Booking-input"
+                    className="booking-input"
                 />
-
-                <button className="Booking-button">
+                <button className="booking-button">
                     Book time
                 </button>
+
+
             </div>
         </div>
-    );
-}
 
+    );
+
+}
 export default Booking;

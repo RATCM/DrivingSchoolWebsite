@@ -1,7 +1,13 @@
 import React from "react";
 import "./Login.css";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+    const navigate = useNavigate();
+    /*Add call to Login method on backend to log in*/
+    const handleLogin = () => {
+        navigate("/Min_side");
+    };
     return (
         <div className="login-page">
             <div className="login-box">
@@ -19,7 +25,7 @@ function Login() {
                     className="login-input"
                 />
 
-                <button className="login-button">
+                <button className="login-button" onClick={handleLogin}>
                     Log ind
                 </button>
             </div>

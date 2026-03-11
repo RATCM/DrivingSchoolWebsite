@@ -27,16 +27,21 @@ function Min_Side() {
                         </div>
 
                         <div className="rightColumn">
-                            <MyAppointmentsBox />
-                        </div>
+                        <MyAppointmentsBox />
+                    </div>
 
                     </div>
                 )}
 
                 {/* BOOK */}
                 {active === 1 && (
-                    <div className="contentCard">
-                        <Booking/>
+                    <div className="dashboardLayout">
+                        <div className="middleColumn">
+                            <Booking/>
+                        </div>
+                        <div className="rightColumn">
+                            <MyAppointmentsBox />
+                        </div>
                     </div>
                 )}
 
