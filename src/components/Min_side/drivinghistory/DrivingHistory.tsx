@@ -1,7 +1,7 @@
-import "./MyAppointmentsBox.css";
+import "./DrivingHistory.css";
 
-function MyAppointmentsBox() {
-    const appointments = [
+function DrivingHistory() {
+    const History = [
         { date: "3 dage", time: "08:00", type: "Køretime", teacher: "Mr. Smith", place: "DTU    " },
         { date: "18-02-26", time: "08:00", type: "Køretime", teacher: "Mr. Smith", place: "DTU" },
         { date: "19-02-26", time: "14:00", type: "Køretime", teacher: "Mr. Smith", place: "DTU" },
@@ -10,16 +10,10 @@ function MyAppointmentsBox() {
     ];
     return (
         <div className="cardBox">
-            <h2>Mine aktiviteter</h2>
-            <div className="MyAppointmentsHeader">
-                <span><b>Dato</b></span>
-                <span><b>Tid</b></span>
-                <span><b>Type</b></span>
-                <span><b>Instruktør</b></span>
-                <span><b>Placering</b></span>
-            </div>
-            {appointments.map((a, i) => (
-                <div className="MyAppointments" key={i}>
+            <h2>Mine køretimer</h2>
+
+            {History.map((a, i) => (
+                <div className="DrivingHistory" key={i}>
                     <span>{a.date}</span>
                     <span>{a.time}</span>
                     <span>{a.type}</span>
@@ -32,4 +26,4 @@ function MyAppointmentsBox() {
     );
 }
 
-export default MyAppointmentsBox;
+export default DrivingHistory;

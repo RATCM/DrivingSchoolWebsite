@@ -4,6 +4,8 @@ import "./Min_side.css";
 import MyDrivingSchoolBox from "../components/Min_side/skrivebord/MyDrivingSchoolBox";
 import MyProgressBox from "../components/Min_side/skrivebord/MyProgressBox";
 import MyAppointmentsBox from "../components/Min_side/skrivebord/MyAppointmentsBox";
+import Booking from "../components/Min_side/booking/Booking";
+import DrivingHistory from "../components/Min_side/drivinghistory/DrivingHistory";
 
 function Min_Side() {
     const [active, setActive] = useState(0);
@@ -25,16 +27,21 @@ function Min_Side() {
                         </div>
 
                         <div className="rightColumn">
-                            <MyAppointmentsBox />
-                        </div>
+                        <MyAppointmentsBox />
+                    </div>
 
                     </div>
                 )}
 
                 {/* BOOK */}
                 {active === 1 && (
-                    <div className="contentCard">
-                        Book en køretime content...
+                    <div className="dashboardLayout">
+                        <div className="middleColumn">
+                            <Booking/>
+                        </div>
+                        <div className="rightColumn">
+                            <MyAppointmentsBox />
+                        </div>
                     </div>
                 )}
 
@@ -45,8 +52,15 @@ function Min_Side() {
                     </div>
                 )}
 
-                {/* Indstillinger */}
+                {/* KØRSELSHISTORIK */}
                 {active === 3 && (
+                    <div className="contentCard">
+                        <DrivingHistory/>
+                    </div>
+                )}
+
+                {/* Indstillinger */}
+                {active === 4 && (
                     <div className="contentCard">
                         Indstillinger content...
                     </div>

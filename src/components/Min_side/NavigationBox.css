@@ -3,7 +3,7 @@
     border-radius: 28px;
     padding: 28px 18px;
     box-shadow: 0 0 0 1px rgba(0,0,0,0.05);
-    height: calc(100vh - 140px); /* adjust depending on your topbar height */
+    height: calc(100vh - 162px);  /*  Height used to ensure card is not reason that page is scrollable  */
 }
 
 .navigationTitle {

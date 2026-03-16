@@ -14,7 +14,9 @@ function NavigationBox({
             "Skrivebord",
             "Book en køretime",
             "Kalender",
+            "Kørselshistorik",
             "Indstillinger"
+
         ],
         activeIndex = 0,
         onSelect,

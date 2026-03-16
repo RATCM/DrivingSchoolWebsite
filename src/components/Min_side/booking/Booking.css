@@ -1,0 +1,43 @@
+.booking-page {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* padding-top: 112px;  same as topbar height */
+}
+
+.booking-box {
+    width: 350px;
+    padding: 30px;
+    background-color: #f3f3f3;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.booking-box h1 {
+    font-size: 24px;
+    text-align: center;
+}
+
+.booking-input {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.booking-button {
+    padding: 10px;
+    border-radius: 6px;
+    border: none;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    width: 100%;
+}
+
+.booking-button:hover {
+    background-color: #333;
+}
