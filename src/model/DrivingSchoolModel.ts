@@ -1,6 +1,6 @@
 class DrivingSchoolModel {
     schoolName: string;
-    phone: number;
+    phone: string;
     website: string;
     address: string;
     region: string;
@@ -8,7 +8,7 @@ class DrivingSchoolModel {
 
     constructor(
         schoolName: string,
-        phone: number,
+        phone: string,
         website: string,
         address: string,
         region: string,
