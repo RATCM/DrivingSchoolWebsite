@@ -1,17 +1,13 @@
 import React, { useState } from 'react';
 import './Kalender.css';
-import getAppointments from "../../Appointments";
-import { get } from 'http';
+import getAppointments  from "../../Appointments";
 
-interface Appointment {
-    id: string;
-    date: Date;
-    title: string;
-    time: string;
-    isactive: boolean;
-}
+type KalenderProps = {
+    selectedDate: Date | null;
+    onSelectDate: (date: Date) => void;
+};
 
-const Kalender: React.FC = () => {
+const Kalender: React.FC<KalenderProps> = ({ selectedDate, onSelectDate }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
 
     const appointments = getAppointments();
@@ -32,6 +28,15 @@ const Kalender: React.FC = () => {
 
     const handleNextMonth = () => {
         setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
+    };
+
+    const handleDayClick = (day: number) => {
+        const clickedDate = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            day
+        );
+        onSelectDate(clickedDate);
     };
 
     const hasActiveAppointment = (day: number) => {
@@ -60,6 +65,15 @@ const Kalender: React.FC = () => {
             day === today.getDate() &&
             currentDate.getMonth() === today.getMonth() &&
             currentDate.getFullYear() === today.getFullYear()
+        );
+    };
+
+    const isSelected = (day: number) => {
+        return (
+            selectedDate !== null &&
+            day === selectedDate.getDate() &&
+            currentDate.getMonth() === selectedDate.getMonth() &&
+            currentDate.getFullYear() === selectedDate.getFullYear()
         );
     };
 
@@ -96,9 +110,11 @@ const Kalender: React.FC = () => {
                 {days.map((day) => (
                     <div
                         key={day}
+                        onClick={() => handleDayClick(day)}
                         className={[
                             'kalender-day',
                             isToday(day) ? 'today' : '',
+                            isSelected(day) ? 'selected' : '',
                             hasActiveAppointment(day) ? 'active-appointment' : '',
                             !hasActiveAppointment(day) && hasInactiveAppointment(day)
                                 ? 'inactive-appointment'
