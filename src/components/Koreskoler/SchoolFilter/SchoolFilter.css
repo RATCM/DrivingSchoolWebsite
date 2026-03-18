@@ -1,0 +1,25 @@
+.filter-label {
+    display: flex;
+}
+.filter-box {
+    width: 350px;
+    padding: 40px;
+    background-color: #f3f3f3;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+.filterchecklist {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filterchecklist label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+}
