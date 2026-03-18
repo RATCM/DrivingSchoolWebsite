@@ -15,7 +15,7 @@ function Booking() {
     ]
     return (
 
-        <div className="booking-page">
+
             <div className="booking-box">
                 <h1>Book en køretime</h1>
                 <h2>Type</h2>
@@ -40,7 +40,7 @@ function Booking() {
 
 
             </div>
-        </div>
+
 
     );
 
