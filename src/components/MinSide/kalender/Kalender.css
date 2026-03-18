@@ -1,0 +1,189 @@
+.kalender {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', sans-serif;
+    width: 350px;
+    margin: 0 auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.kalender-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.kalender-header button {
+    background: #f0f0f0;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.kalender-header button:hover {
+    background: #e0e0e0;
+}
+
+.kalender-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+
+.kalender-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.kalender-weekday {
+    text-align: center;
+    font-weight: 600;
+    color: #666;
+    font-size: 12px;
+    padding: 8px 0;
+}
+
+.kalender-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+}
+
+.kalender-day {
+    min-height: 40px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    background: #f9f9f9;
+    color: #333;
+    transition: all 0.2s;
+    padding: 6px;
+    box-sizing: border-box;
+}
+
+.kalender-day:hover:not(.other-month) {
+    background: #e3f2fd;
+}
+
+.kalender-day.today {
+    background: #1976d2;
+    color: white;
+    font-weight: 600;
+}
+
+.kalender-day.selected {
+    outline: 2px solid #4caf50;
+}
+
+.kalender-day.has-appointment {
+    background: #e53935;
+    color: white;
+}
+
+.kalender-day.has-appointment:hover {
+    background: #d32f2f;
+}
+
+.kalender-day.other-month {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.day-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.day-number {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.appointments-preview {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.appointment-preview {
+    font-size: 11px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.booking-box {
+    margin-top: 20px;
+    padding: 16px;
+    border-radius: 10px;
+    background: #f5f7fa;
+    border: 1px solid #d9e1ea;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.booking-box input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.booking-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.booking-actions button {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #1976d2;
+    color: white;
+}
+
+.booking-actions button:last-child {
+    background: #777;
+}
+
+.selected-day-appointments {
+    margin-top: 10px;
+}
+
+.selected-appointment {
+    padding: 8px 10px;
+    background: white;
+    border-radius: 6px;
+    margin-top: 6px;
+    border: 1px solid #e0e0e0;
+}
+/* Active = GREEN */
+.kalender-day.active-appointment {
+    background: #4caf50;
+    color: white;
+}
+
+.kalender-day.active-appointment:hover {
+    background: #43a047;
+}
+
+/* Inactive = RED */
+.kalender-day.inactive-appointment {
+    background: #e53935;
+    color: white;
+}
+
+.kalender-day.inactive-appointment:hover {
+    background: #d32f2f;
+}

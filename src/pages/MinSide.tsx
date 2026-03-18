@@ -6,6 +6,7 @@ import MyProgressBox from "../components/MinSide/skrivebord/MyProgressBox";
 import MyAppointmentsBox from "../components/MinSide/skrivebord/MyAppointmentsBox";
 import Booking from "../components/MinSide/booking/Booking";
 import DrivingHistory from "../components/MinSide/drivinghistory/DrivingHistory";
+import Kalender from "../components/MinSide/kalender/Kalender";
 
 function MinSide() {
     const [active, setActive] = useState(0);
@@ -47,8 +48,13 @@ function MinSide() {
 
                 {/* KALENDER */}
                 {active === 2 && (
-                    <div className="contentCard">
-                        Kalender content...
+                    <div className="dashboardLayout">
+                        <div className="middleColumn">
+                            <Kalender/>
+                        </div>
+                        <div className="rightColumn">
+                            <MyAppointmentsBox/>
+                        </div>
                     </div>
                 )}
 
