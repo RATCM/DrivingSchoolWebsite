@@ -1,0 +1,27 @@
+.MyAppointments {
+    display: grid;
+    grid-template-columns: 80px 60px 100px 100px 1fr;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 20px;
+    background: #e7e7e7;
+    margin-bottom: 10px;
+}
+.MyAppointmentsHeader {
+    display: grid;
+    grid-template-columns: 80px 60px 100px 100px 1fr;
+    gap: 10px;
+    padding: 10px 12px;
+    /*border-radius: 20px; */
+    background: white;
+    margin-bottom: 10px;
+}
+
+.MyAppointments.highlighted {
+    background: #7fb3ff;
+    color: white;
+}
+.cardBox h2 {
+    font-size: 28px;   /* change this to the size you want */
+    margin-bottom: 15px;
+}
