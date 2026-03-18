@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import NavigationBox from "../components/Min_side/NavigationBox";
-import "./Min_side.css";
-import MyDrivingSchoolBox from "../components/Min_side/skrivebord/MyDrivingSchoolBox";
-import MyProgressBox from "../components/Min_side/skrivebord/MyProgressBox";
-import MyAppointmentsBox from "../components/Min_side/skrivebord/MyAppointmentsBox";
-import Booking from "../components/Min_side/booking/Booking";
-import DrivingHistory from "../components/Min_side/drivinghistory/DrivingHistory";
+import NavigationBox from "../components/MinSide/NavigationBox";
+import "./MinSide.css";
+import MyDrivingSchoolBox from "../components/MinSide/skrivebord/MyDrivingSchoolBox";
+import MyProgressBox from "../components/MinSide/skrivebord/MyProgressBox";
+import MyAppointmentsBox from "../components/MinSide/skrivebord/MyAppointmentsBox";
+import Booking from "../components/MinSide/booking/Booking";
+import DrivingHistory from "../components/MinSide/drivinghistory/DrivingHistory";
 
-function Min_Side() {
+function MinSide() {
     const [active, setActive] = useState(0);
 
     return (
@@ -71,4 +71,4 @@ function Min_Side() {
     );
 }
 
-export default Min_Side;
+export default MinSide;
