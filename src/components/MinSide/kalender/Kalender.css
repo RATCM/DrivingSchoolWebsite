@@ -121,42 +121,6 @@
     white-space: nowrap;
 }
 
-.booking-box {
-    margin-top: 20px;
-    padding: 16px;
-    border-radius: 10px;
-    background: #f5f7fa;
-    border: 1px solid #d9e1ea;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.booking-box input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-.booking-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.booking-actions button {
-    padding: 10px 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    background: #1976d2;
-    color: white;
-}
-
-.booking-actions button:last-child {
-    background: #777;
-}
-
 .selected-day-appointments {
     margin-top: 10px;
 }
