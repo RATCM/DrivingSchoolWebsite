@@ -1,4 +1,4 @@
 .school-results {
-    border-radius: 28px;
-
+    height: 25%;
+    overflow: scroll;
 }

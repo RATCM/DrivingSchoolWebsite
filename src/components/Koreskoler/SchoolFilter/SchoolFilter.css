@@ -3,12 +3,14 @@
 }
 .filter-box {
     width: 350px;
+    height: 500px;
     padding: 40px;
     background-color: #f3f3f3;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
     gap: 15px;
+    overflow: scroll;
 }
 
 
@@ -22,4 +24,21 @@
     display: flex;
     justify-content: space-between;
     font-size: 12px;
+}
+
+datalist {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    writing-mode: horizontal-tb;
+    width: 260px;
+}
+
+option {
+    padding: 0;
+}
+
+input[type="range"] {
+    width: 260px;
+    margin: 0;
 }
