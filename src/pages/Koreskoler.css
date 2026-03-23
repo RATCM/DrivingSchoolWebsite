@@ -1,6 +1,6 @@
 .koreskoler-page {
     box-sizing: border-box;
-    height: 100vh;
+    height: 100%;
     display: grid;
     grid-template-columns: 1fr 3fr; /* left ~25%, right ~75% */
     gap: 24px;

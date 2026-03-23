@@ -16,6 +16,9 @@ function Koreskoler() {
                 <h1>Velkommen</h1>
                 <p>Det her er Køreskoler siden</p>
                 < SchoolSearch/>
+                <p>Søgeresultater</p>
+                {/*hacky horizontal linje*/}
+                _______________________________________________________________________________________________________________________________________________________________________
                 < SchoolResultBox />
             </div>
 
