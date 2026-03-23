@@ -1,5 +1,5 @@
 import "./MyAppointmentsBox.css";
-import getAppointments from "../../Appointments";
+import getAppointments from "../../Functions/Appointments";
 
 type props = {
     Date: Date;

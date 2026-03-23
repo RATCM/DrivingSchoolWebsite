@@ -1,9 +1,8 @@
 import "./DrivingHistory.css";
-import getAppointments from "../../Appointments";
+import getAppointments, { getHistory } from "../../Functions/History";
 
 function DrivingHistory() {
-    const appointments = getAppointments();
-    const History = appointments.filter(a => a.date < new Date());
+    const History = getHistory();
     return (
         <div className="cardBox">
             <h2>Mine køretimer</h2>

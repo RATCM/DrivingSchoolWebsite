@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Kalender.css';
-import getAppointments  from "../../Appointments";
+import getAppointments  from "../../Functions/Appointments";
 
 type KalenderProps = {
     selectedDate: Date | null;
@@ -56,6 +56,9 @@ const Kalender: React.FC<KalenderProps> = ({ selectedDate, onSelectDate }) => {
                 apt.date.getDate() === day &&
                 apt.date.getMonth() === currentDate.getMonth() &&
                 apt.date.getFullYear() === currentDate.getFullYear()
+                //apt.date.getDate() >= new Date().getDate() &&
+                //apt.date.getMonth() >= new Date().getMonth() &&
+                //apt.date.getFullYear() >= new Date().getFullYear()
         );
     };
 
