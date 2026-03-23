@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Kalender.css';
-import getAppointments  from "../../Functions/Appointments";
+import appointments  from "../../Functions/Appointments";
 
 type KalenderProps = {
     selectedDate: Date | null;
@@ -10,7 +10,7 @@ type KalenderProps = {
 const Kalender: React.FC<KalenderProps> = ({ selectedDate, onSelectDate }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
 
-    const appointments = getAppointments();
+    //const appointments = appointments;
     const orderedAppointments = appointments.sort((a, b) => a.time.localeCompare(b.time));
 
     const getDaysInMonth = (date: Date) => {
