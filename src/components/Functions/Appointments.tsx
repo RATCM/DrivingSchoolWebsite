@@ -9,7 +9,7 @@ export interface Appointment {
     teacher: string;
     place: string;
 }
-const appointments = getAppointments();
+const appointments: Appointment[] = getAppointments();
 export function getAppointments(): Appointment[] {
     return [
         { id: '0', date: new Date(2023, 1, 13), type: 'Banekørsel', time: '08:00', isactive: true , teacher: "Mr. Smith", place: "DTU"},
