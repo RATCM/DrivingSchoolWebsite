@@ -8,5 +8,7 @@ function SchoolList() {
     const vm2 = mapDrivingSchoolViewModel(drivingSchool2Cool);
 
     const list = {vm, vm2};
+    return list;
 }
+export default SchoolList;
 

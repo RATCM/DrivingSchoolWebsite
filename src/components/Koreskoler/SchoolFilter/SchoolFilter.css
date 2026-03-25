@@ -2,14 +2,14 @@
     display: flex;
 }
 .filter-box {
-    width: 350px;
-    height: 500px;
-    padding: 40px;
+    width: 25vw;
+    height: 60vh;
+    padding: 5vh;
     background-color: #f3f3f3;
-    border-radius: 12px;
+    border-radius: 0.8vh;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 1.5vh;
     overflow: scroll;
 }
 
@@ -17,13 +17,13 @@
 .filterchecklist {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 0.5vh;
 }
 
 .filterchecklist label {
     display: flex;
     justify-content: space-between;
-    font-size: 12px;
+    font-size: 0.9vw;
 }
 
 datalist {
@@ -31,7 +31,7 @@ datalist {
     flex-direction: row;
     justify-content: space-between;
     writing-mode: horizontal-tb;
-    width: 260px;
+    width: 18vw;
 }
 
 option {
@@ -39,6 +39,6 @@ option {
 }
 
 input[type="range"] {
-    width: 260px;
+    width: 18vw;
     margin: 0;
 }

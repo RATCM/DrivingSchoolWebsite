@@ -8,26 +8,26 @@
 }
 
 .search-box {
-    width: 600px;
+    width: 25vw;
     background-color: #ffffff;
-    border-radius: 12px;
+    border-radius: 1vw;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 1.5vh;
 }
 
 .search-input {
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 14px;
+    padding: 1vh;
+    border-radius: 0.5vw;
+    border: 0.1vh solid #ccc;
+    font-size: 1.8vh;
 }
 
 .search-button {
     align-self: center;
-    width: 240px;
-    padding: 10px;
-    border-radius: 6px;
+    width: 25vw;
+    padding: 0.8vw;
+    border-radius: 1vh;
     border: none;
     background-color: black;
     color: white;
