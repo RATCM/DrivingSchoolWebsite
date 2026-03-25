@@ -1,12 +1,13 @@
 import "./MyAppointmentsBox.css";
 import getAppointments from "../../Functions/Appointments";
+import appointments from "../../Functions/Appointments";
 
 type props = {
     Date: Date;
 }
 
 export function MyAppointmentsBox() {
-    const appointments = getAppointments();
+    
     const comingAppointments = appointments.filter(a => a.date >= new Date());
     return (
         <div className="cardBox">
@@ -36,7 +37,6 @@ export function MyAppointmentsBox() {
 }
 
 export function MyFilteredAppointmentsBox({ Date }: props) {
-    const appointments = getAppointments();
     const todaysAppointments = appointments.filter(
         (a) =>
             a.date.getDate() === Date.getDate() &&
