@@ -5,7 +5,9 @@ import appointments from "../../Functions/Appointments";
 type props = {
     Date: Date;
 }
-
+function handleClick(id: string) {
+    alert(`Du klikkede på aftale med id: ${id}`);
+}
 export function MyAppointmentsBox() {
     
     const comingAppointments = appointments.filter(a => a.date >= new Date());
@@ -54,7 +56,10 @@ export function MyFilteredAppointmentsBox({ Date }: props) {
                 <span><b>Placering</b></span>
             </div>
             {todaysAppointments.map((a, i) => (
-                <div className="MyAppointments" key={i}>
+                <div className="MyAppointments" key={i}
+                onClick={() => handleClick(a.id)}
+                style={{ cursor: "pointer" }} // optional: makes it feel clickable
+            >
                     <span>{a.date.toLocaleDateString('da-DK', {
                     month: 'long',
                     day: 'numeric'

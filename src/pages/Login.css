@@ -7,31 +7,35 @@
 }
 
 .login-box {
-    width: 350px;
+    width: 20vw;
+    height: auto;
     padding: 40px;
     background-color: #f3f3f3;
     border-radius: 12px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 0.93vh;
 }
 
 .login-input {
-    padding: 10px;
+    padding: 0.625vh;
     border-radius: 6px;
     border: 1px solid #ccc;
     font-size: 14px;
 }
 
 .login-button {
-    padding: 10px;
+    padding: 0.625vh;
     border-radius: 6px;
     border: none;
-    background-color: black;
+    background-color: #1E63D6;
     color: white;
     cursor: pointer;
+    height: 5vh;
+    width: auto;
+    font-size: 2vh;
 }
 
 .login-button:hover {
-    background-color: #333;
+    background-color: #1943A6;
 }
