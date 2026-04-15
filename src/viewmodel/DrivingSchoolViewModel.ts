@@ -18,3 +18,4 @@ export function mapDrivingSchoolViewModel(model: DrivingSchoolModel): DrivingSch
         pricing: `${model.pricing}`,
     }
 }
+export default DrivingSchoolViewModel;

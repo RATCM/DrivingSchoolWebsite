@@ -1,27 +1,25 @@
-import DrivingSchoolModel from "../../../model/DrivingSchoolModel";
-import {mapDrivingSchoolViewModel} from "../../../viewmodel/DrivingSchoolViewModel";
 import "./SchoolResults.css"
 import React from "react";
 import "../../Functions/SchoolList"
-import SchoolList from "../../Functions/SchoolList";
+import schoolViewModels from "../../Functions/SchoolList";
 
-function SchoolResultBox() {
+function SchoolResults(searchTerm: string|null) {
 
-    const drivingSchoolList = SchoolList
-    // const filtreretliste:  = drivingSchoolList.filter(a => a.navn.includes(searchTerm))
+    const filterTerm = searchTerm || ""
+    const filteredList= schoolViewModels.filter(a => a.schoolName.toLowerCase().includes(filterTerm.toLowerCase()))
+
 
     return (
-        <div>
+        filteredList.map((vm, i) => (
+                <div className="Køreskole" key={i}>
+                    <p><b>{vm.schoolName}</b></p>
+                    <p>Adresse: {vm.address}</p>
+                    <p>Tlf: {vm.phone}</p>
+                    <p>Hjemmeside: {vm.website}</p>
+                    <p>Pakkepris: {vm.pricing}</p>
 
-
-
-        {/*<p style={{marginTop:20}}><b>{vm.schoolName}</b></p>*/}
-        {/*        <p>Adresse: {vm.address}</p>*/}
-        {/*        <p>Tlf: {vm.phone}</p>*/}
-        {/*        <p>Hjemmeside: {vm.website}</p>*/}
-        {/*        <p>Pakkepris: {vm.pricing} kroner</p>*/}
-        </div>
-);
+                </div>
+            )));
 }
 
-export default SchoolResultBox;
+export default SchoolResults;

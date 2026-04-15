@@ -2,13 +2,18 @@ import React from "react"
 import "./SchoolFilter.css"
 
 function SchoolFilter() {
-
+    const [currentPrice, setCurrentPrice] = React.useState("");
+    const inputPrice= document.querySelector("input");
+    function updateCurrentPrice() {
+        try {setCurrentPrice(inputPrice!.value);}
+        catch (error) {setCurrentPrice("");}
+    }
     return (
         <div className="filter-box">
             <b>Filtrer søgeresultater</b>
 
             Pakkepris:
-            <input id={"price"} type={"range"} min={5000} max={20000} step={100} name={"20000"} list={"prices"}/>
+            <input id={"price"} type={"range"} min={5000} max={20000} step={100} name={"20000"} list={"prices"} title={currentPrice} onChange={updateCurrentPrice}/>
             <datalist id={"prices"}>
                 <option value="5000" label="5000"></option>
                 <option value="7500"></option>
