@@ -7,6 +7,9 @@ import Login from "./pages/Login";
 import Koreskoler from "./pages/Koreskoler";
 import MinSide from "./pages/MinSide";
 import Maps from "./pages/Maps";
+import DrivingSchoolModel from "./model/DrivingSchoolModel";
+
+const DSM = new DrivingSchoolModel("a","b","c","d","e", 2);
 
 function App() {
     return (
