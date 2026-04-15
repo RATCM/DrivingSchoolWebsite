@@ -9,10 +9,11 @@ function Koreskoler() {
     const [active, setActive] = React.useState(false);
     const [searchTerm, setSearchTerm] = React.useState("");
     const resultBox = SchoolResults(searchTerm);
-    // const input = document.querySelector("input");
+    const inputBox = document.querySelector("#search-box");
+    const inputText = inputBox?.querySelector("input");
     function updateSearchTerm() {
-        // try {setSearchTerm(input!.value);}
-        // catch (error) {setSearchTerm("")}
+        try {setSearchTerm(inputText!.value);}
+        catch (error) {setSearchTerm("")}
         setActive(true);
     }
     return (
@@ -24,14 +25,14 @@ function Koreskoler() {
 
             <div className="right-column">
                 <div className="school-search">
-                    <div className="search-box">
+                    <div className="search-box" id = "search-box">
                         <h2>Find køreskole</h2>
                         <input
                             id="search-text"
                             type="text"
                             placeholder="Køreskolens navn"
                             className="search-input"
-                            defaultValue={searchTerm}
+                            defaultValue={""}
                         />
                         <button className="search-button" onClick={() => updateSearchTerm()}>
                             Søg
@@ -39,7 +40,7 @@ function Koreskoler() {
                     </div>
                 </div>
 
-                <p>Søgeresultater</p>
+                <div><h1>Søgeresultater</h1></div>
                 {active && resultBox}
             </div>
 

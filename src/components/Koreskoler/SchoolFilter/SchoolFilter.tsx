@@ -6,7 +6,7 @@ function SchoolFilter() {
     const inputPrice= document.querySelector("input");
     function updateCurrentPrice() {
         try {setCurrentPrice(inputPrice!.value);}
-        catch (error) {setCurrentPrice("");}
+        catch (e) {setCurrentPrice("");}
     }
     return (
         <div className="filter-box">
