@@ -1,9 +1,8 @@
 import "./SchoolResults.css"
 import React from "react";
-import "../../Functions/SchoolList"
-import schoolViewModels from "../../Functions/SchoolList";
+import drivingSchoolViewModel from "../../../viewmodel/DrivingSchoolViewModel";
 
-function SchoolResults(searchTerm: string|null) {
+function SchoolResults(searchTerm: string|null, schoolViewModels: drivingSchoolViewModel[]) {
 
     const filterTerm = searchTerm || ""
     const filteredList= schoolViewModels.filter(a => a.schoolName.toLowerCase().includes(filterTerm.toLowerCase()))
@@ -11,13 +10,12 @@ function SchoolResults(searchTerm: string|null) {
 
     return (
         filteredList.map((vm, i) => (
-                <div className="Køreskole" key={i}>
+                <div className="koreskole" key={i}>
                     <p><b>{vm.schoolName}</b></p>
                     <p>Adresse: {vm.address}</p>
                     <p>Tlf: {vm.phone}</p>
                     <p>Hjemmeside: {vm.website}</p>
                     <p>Pakkepris: {vm.pricing}</p>
-
                 </div>
             )));
 }

@@ -42,3 +42,15 @@ input[type="range"] {
     width: 18vw;
     margin: 0;
 }
+
+.filter-button {
+    align-self: center;
+    width: 8vw;
+    margin-top: 0.5vh;
+    padding: 0.625vw;
+    border-radius: 1vh;
+    border: none;
+    background-color: #1F1F1F;
+    color: white;
+    cursor: pointer;
+}
