@@ -49,6 +49,13 @@ function Koreskoler() {
         return schoolViewModels.filter(a => Number(a.pricing)<Number(currentPrice))
     }
     const resultBox = SchoolResults(searchTerm, filterList());
+    const matchingResults = filterList().filter(a => a.schoolName.toLowerCase().includes(searchTerm.toLowerCase())).length;
+    function pluralResults(): string {
+        if (matchingResults !== 1) {
+            return "er"
+        }
+        return ""
+    }
 
 
     return (
@@ -84,18 +91,18 @@ function Koreskoler() {
                         </datalist>
                     </div>
 
-                    <div id ="rating-section">
-                        <b>Antal stjerner:</b>
-                        <input id={"rating"} type={"range"} min={0} max={5} step={1} list={"ratings"}/>
-                        <datalist id={"ratings"}>
-                            <option value="0" label="0"></option>
-                            <option value="1" label="1"></option>
-                            <option value="2" label="2"></option>
-                            <option value="3" label="3"></option>
-                            <option value="4" label="4"></option>
-                            <option value="5" label="5"></option>
-                        </datalist>
-                    </div>
+                    {/*<div id ="rating-section">*/}
+                    {/*    <b>Antal stjerner:</b>*/}
+                    {/*    <input id={"rating"} type={"range"} min={0} max={5} step={1} list={"ratings"}/>*/}
+                    {/*    <datalist id={"ratings"}>*/}
+                    {/*        <option value="0" label="0"></option>*/}
+                    {/*        <option value="1" label="1"></option>*/}
+                    {/*        <option value="2" label="2"></option>*/}
+                    {/*        <option value="3" label="3"></option>*/}
+                    {/*        <option value="4" label="4"></option>*/}
+                    {/*        <option value="5" label="5"></option>*/}
+                    {/*    </datalist>*/}
+                    {/*</div>*/}
 
                     <div id ="pass-rate-section">
                         <b>Mindste gennemførselsprocent:</b>
@@ -160,11 +167,23 @@ function Koreskoler() {
                         <button className="search-button" onClick={() => updateSearchTerm()}>
                             Søg
                         </button>
+
                     </div>
                 </div>
+                <div>
+                    {active &&
+                        <div className="result-header">
+                            <div className="result-header-text">
+                                <strong>Din søgning gav {matchingResults} resultat{pluralResults()}:</strong>
+                            </div>
+                            {/*<button className="cancel-search" onClick={() => setActive(false)}>X</button>*/}
+                        </div>
+                    }
+                </div>
+                <div className={"school-results"}>
+                    {active && resultBox}
+                </div>
 
-                <div><h1><u>Søgeresultater</u></h1></div>
-                {active && resultBox}
             </div>
 
         </div>

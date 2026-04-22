@@ -1,8 +1,12 @@
-.school-results {
-    height: 25%;
-    overflow: scroll;
-}
 .koreskole {
     padding-top: 1vh;
     padding-bottom: 1vh;
+    padding-inline-start: 1.5vh;
+    background-origin: border-box;
+    border-radius: 0.5vh;
+    display: flex;
+    flex-direction: column;
+    border: darkgray 1px solid;
+    background-color: white;
+
 }
