@@ -44,11 +44,33 @@ function Koreskoler() {
         catch (e) {setCurrentPassRate("");}
     }
 
-
+    //filtering and sorting
     function filterList(): DrivingSchoolViewModel[] {
         return schoolViewModels.filter(a => Number(a.pricing)<Number(currentPrice))
     }
-    const resultBox = SchoolResults(searchTerm, filterList());
+    const [sortOption, setSortOption] = React.useState("alphabetical");
+    function sortList(list: DrivingSchoolViewModel[]): DrivingSchoolViewModel[] {
+        switch (sortOption) {
+            case "alphabetical": return list.sort((a,b) => {
+                if (a.schoolName.toLowerCase() < b.schoolName.toLowerCase()) {
+                    return -1;
+                }
+                if (a.schoolName.toLowerCase() > b.schoolName.toLowerCase()) {
+                    return 1;
+                }
+                return 0;
+            })
+            case "package-ascending": return list.sort((a,b) => Number(a.pricing) - Number(b.pricing))
+            case "package-descending": return list.sort((a,b) => Number(b.pricing) + Number(b.pricing))
+            case "avg-ascending": return list.sort((a,b) => Number(a.pricing) - Number(b.pricing))
+            case "avg-descending": return list.sort((a,b) => Number(b.pricing) + Number(b.pricing))
+            case "pass-rate-descending": return list.sort((a,b) => Number(b.pricing) + Number(b.pricing))
+            default: return list.sort((a,b) => Number(a.pricing) - Number(b.pricing))
+        }
+
+    }
+
+    const resultBox = SchoolResults(searchTerm, sortList(filterList()));
     const matchingResults = filterList().filter(a => a.schoolName.toLowerCase().includes(searchTerm.toLowerCase())).length;
     function pluralResults(): string {
         if (matchingResults !== 1) {
