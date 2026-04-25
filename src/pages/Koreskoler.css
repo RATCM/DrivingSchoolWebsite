@@ -66,7 +66,7 @@
 
 .result-header {
     display: grid;
-    grid-template-columns: 25fr 1fr;
+    grid-template-columns: 2.2fr 1fr;
     padding-bottom: 2vh;
     justify-content: space-between;
     flex-direction: column;
@@ -76,6 +76,11 @@
 .result-header-text {
     flex: auto;
 }
+
+.sort-results {
+    flex: auto;
+}
+
 
 h1 {
     font-size: 2.5vh;

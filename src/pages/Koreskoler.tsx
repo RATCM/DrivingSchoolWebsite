@@ -49,6 +49,12 @@ function Koreskoler() {
         return schoolViewModels.filter(a => Number(a.pricing)<Number(currentPrice))
     }
     const [sortOption, setSortOption] = React.useState("alphabetical");
+    const sortDropDown= document.querySelector("#sort-results");
+    const inputSort= sortDropDown?.querySelector("select");
+    function updateSortOption() {
+        try {setSortOption(inputSort!.value);}
+        catch (e) {setSortOption("");}
+    }
     function sortList(list: DrivingSchoolViewModel[]): DrivingSchoolViewModel[] {
         switch (sortOption) {
             case "alphabetical": return list.sort((a,b) => {
@@ -61,11 +67,11 @@ function Koreskoler() {
                 return 0;
             })
             case "package-ascending": return list.sort((a,b) => Number(a.pricing) - Number(b.pricing))
-            case "package-descending": return list.sort((a,b) => Number(b.pricing) + Number(b.pricing))
+            case "package-descending": return list.sort((a,b) => Number(b.pricing) - Number(a.pricing))
             case "avg-ascending": return list.sort((a,b) => Number(a.pricing) - Number(b.pricing))
-            case "avg-descending": return list.sort((a,b) => Number(b.pricing) + Number(b.pricing))
-            case "pass-rate-descending": return list.sort((a,b) => Number(b.pricing) + Number(b.pricing))
-            default: return list.sort((a,b) => Number(a.pricing) - Number(b.pricing))
+            case "avg-descending": return list.sort((a,b) => Number(b.pricing) - Number(a.pricing))
+            case "pass-rate-descending": return list.sort((a,b) => Number(b.pricing) - Number(a.pricing))
+            default: return list;
         }
 
     }
@@ -177,7 +183,7 @@ function Koreskoler() {
 
             <div className="right-column">
                 <div className="school-search">
-                    <div className="search-box" id = "search-box">
+                    <div className="search-box" id="search-box">
                         <h2>Find køreskole</h2>
                         <input
                             id="search-text"
@@ -189,7 +195,6 @@ function Koreskoler() {
                         <button className="search-button" onClick={() => updateSearchTerm()}>
                             Søg
                         </button>
-
                     </div>
                 </div>
                 <div>
@@ -197,6 +202,17 @@ function Koreskoler() {
                         <div className="result-header">
                             <div className="result-header-text">
                                 <strong>Din søgning gav {matchingResults} resultat{pluralResults()}:</strong>
+                            </div>
+                            <div className="sort-results" id={"sort-results"}>
+                                <label htmlFor="sort-dropdown">Sortér: </label>
+                                <select name="sort" id="sort-dropdown" onChange={() => updateSortOption()}>
+                                    <option value="alphabetical">Alfabetisk</option>
+                                    <option value="package-ascending">Laveste pakkepris</option>
+                                    <option value="package-descending">Højeste pakkepris</option>
+                                    <option value="avg-ascending" disabled>Laveste gennemsnitspris</option>
+                                    <option value="avg-descending" disabled>Højeste gennemsnitspris</option>
+                                    <option value="pass-rate-descending" disabled>Højeste beståelsesprocent</option>
+                                </select>
                             </div>
                             {/*<button className="cancel-search" onClick={() => setActive(false)}>X</button>*/}
                         </div>
