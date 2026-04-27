@@ -18,6 +18,10 @@ function Koreskoler() {
         catch (error) {setSearchTerm("")}
         setActive(true);
     }
+    function onEnter(e: React.KeyboardEvent) {
+        if (e.code === "Enter") {updateSearchTerm()}
+    }
+
 
     //This block reads values of sliders in filter box and displays their current value when hovered over
     const [currentPrice, setCurrentPrice] = React.useState("20000");
@@ -62,6 +66,15 @@ function Koreskoler() {
                     return -1;
                 }
                 if (a.schoolName.toLowerCase() > b.schoolName.toLowerCase()) {
+                    return 1;
+                }
+                return 0;
+            })
+            case "alphabetical-reverse": return list.sort((a,b) => {
+                if (a.schoolName.toLowerCase() > b.schoolName.toLowerCase()) {
+                    return -1;
+                }
+                if (a.schoolName.toLowerCase() < b.schoolName.toLowerCase()) {
                     return 1;
                 }
                 return 0;
@@ -191,6 +204,7 @@ function Koreskoler() {
                             placeholder="Køreskolens navn"
                             className="search-input"
                             defaultValue={""}
+                            onKeyUp={e => onEnter(e)}
                         />
                         <button className="search-button" onClick={() => updateSearchTerm()}>
                             Søg
@@ -206,7 +220,8 @@ function Koreskoler() {
                             <div className="sort-results" id={"sort-results"}>
                                 <label htmlFor="sort-dropdown">Sortér: </label>
                                 <select name="sort" id="sort-dropdown" onChange={() => updateSortOption()}>
-                                    <option value="alphabetical">Alfabetisk</option>
+                                    <option value="alphabetical">Alfabetisk A-Z</option>
+                                    <option value="alphabetical-reverse">Alfabetisk Z-A</option>
                                     <option value="package-ascending">Laveste pakkepris</option>
                                     <option value="package-descending">Højeste pakkepris</option>
                                     <option value="avg-ascending" disabled>Laveste gennemsnitspris</option>
