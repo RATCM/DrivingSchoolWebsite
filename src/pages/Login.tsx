@@ -1,44 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Login.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
+
 function Login() {
     //const axios = require('axios/sist/browser/axios.cjs');
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [role, setRole] = useState("");
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const inviteToken = searchParams.get("invite_token");
     
-    const request = new Request("http://localhost:5259/DrivingSchool", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            Name: "Test School",
-            Address: "Test Address",
-            PhoneNumber: "12345678",
-            WebAddress: "https://test.com"
-        })
-
-    });
     /*Add call to Login method on backend to log in*/
     const handleLogin = async () => {
-        try {
-            
-            const response = await fetch(request);
+        
+    try {
+        //const uri = "http://localhost:5259/admin/login";
+        const uri = "http://localhost:5259/" + role + "/login";
+        
+        const response = await fetch(uri, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
 
-            if (!response.ok) {
-                throw new Error("Failed to create driving school");
-            }
 
-            const data = await response.json();
-            console.log("Created:", data);
+        if (!response.ok) {
+            throw new Error("Login failed");
+        }
 
-            // Navigate after success
-            navigate("/min_side");
-        } catch (error) {
-            console.error(error);
-            navigate("/koreskoler"); // Navigate even on error for testing purposes
+        const data = await response.json();
+
+        // store JWT or session
+        localStorage.setItem("access_token", data.accessToken);
+        localStorage.setItem("refresh_token", data.refreshToken);
+        document.cookie = `role=${role}; path=/; max-age=86400`;
+        
+        navigate("/min_side");
+    } catch (error) {
+        console.error(error);
+        navigate("/koreskoler");
         }
     };
     return (
@@ -57,14 +64,26 @@ function Login() {
                     type="email"
                     placeholder="Email"
                     className="login-input"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                 />
 
                 <input
                     type="password"
                     placeholder="Password"
                     className="login-input"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                 />
-
+                <select
+                    className="login-input"
+                    value={role}
+                    onChange={(e) => setRole(e.target.value)}
+                >
+                    <option value="student">Student</option>
+                    <option value="instructor">Instructor</option>
+                    <option value="admin">Admin</option>
+                </select>
                 <button className="login-button" onClick={handleLogin}>
                     Log ind
                 </button>

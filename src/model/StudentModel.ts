@@ -4,6 +4,7 @@ import UserModel from "./UserModel";
 class StudentModel extends UserModel {
 
     constructor(
+        id: number,
         name: string,
         email: string,
         passwordHash: string,

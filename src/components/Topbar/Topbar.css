@@ -3,20 +3,20 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 112px;              /* set an explicit bar height */
+    height: 10vh;              /* set an explicit bar height */
     z-index: 1000;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: White;
-    padding: 0 16px;           /* no vertical padding -> stable height */
+    padding: 0 1vw;           /* no vertical padding -> stable height */
     border-bottom: 2px solid darkgray;
 }
 
 /* Ensure the topbar logo stays small */
 .topbar-logo {
-    height: 100px;
+    height: 10vh;
     width: auto;
     object-fit: contain;
 }
@@ -24,7 +24,7 @@
 .topbar-left {
     display: flex;
     align-items: center;
-    font-size: 30px;
+    font-size: 10vh;
 }
 .topbar-right {
     display: flex;
@@ -33,10 +33,10 @@
 .topbar-center {
     display: flex;
     align-items: center;
-    gap: 100px;
-    font-size: 30px;
+    gap: 10vw;
+    font-size: 3vh;
 }
 
 .topbar-buttons button {
-    margin-left: 10px;
+    margin-left: 3vh;
 }
