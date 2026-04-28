@@ -7,7 +7,7 @@ function Login() {
     //const axios = require('axios/sist/browser/axios.cjs');
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [role, setRole] = useState("");
+    const [role, setRole] = useState("student");
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const inviteToken = searchParams.get("invite_token");
@@ -17,7 +17,7 @@ function Login() {
         
     try {
         //const uri = "http://localhost:5259/admin/login";
-        const uri = "http://localhost:5259/" + role + "/login";
+        const uri = "http://localhost:5259/auth/login/" + role;
         
         const response = await fetch(uri, {
             method: "POST",
