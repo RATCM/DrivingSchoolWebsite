@@ -1,34 +1,44 @@
-/* Header row */
-.StudentHeader {
-    display: grid;
-    grid-template-columns: 1.5fr 1.5fr 2fr 1fr;
-    gap: 16px;
-    padding: 12px 20px;
-    font-weight: bold;
-    border-bottom: 2px solid #ccc;
-    margin-bottom: 10px;
+.studentRowButton {
+    width: 100%;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
 }
 
-/* Each student row */
-.DrivingHistory {
-    display: grid;
-    grid-template-columns: 1.5fr 1.5fr 2fr 1fr;
-    gap: 16px;
-    padding: 18px 20px;
-    border-radius: 20px;
+.studentRowButton:hover {
+    background: #d7d7d7;
+}
+
+.StudentDetails {
     background: #e7e7e7;
-    margin-bottom: 14px;
-    align-items: start;
+    border-radius: 20px;
+    padding: 20px;
 }
 
-/* Allow long text (IDs) to wrap nicely */
-.DrivingHistory span {
-    min-width: 0;
+.StudentDetails pre {
+    white-space: pre-wrap;
     overflow-wrap: anywhere;
-    word-break: break-word;
 }
 
-.DrivingHistory.highlighted {
-    background: #7fb3ff;
+.deleteButton {
+    background: #d32f2f;
     color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 18px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.deleteButton:hover {
+    background: #b71c1c;
+}
+
+.backButton {
+    margin-bottom: 16px;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
 }
