@@ -9,6 +9,8 @@ import DrivingHistory from "../components/MinSide/drivinghistory/DrivingHistory"
 import Kalender from "../components/MinSide/kalender/Kalender";
 import AdminInstructorView from "../components/MinSide/AdminInstructorView/AdminInstructorView";
 import AdminStudentView from "../components/MinSide/AdminStudentView/AdminStudentView";
+import InstructorStudentView from "../components/MinSide/InstructorStudentView/InstructorStudentView";
+import CreateNewInstructor from "../components/MinSide/CreateNewInstructor/CreateNewInstructor";
 
 type Role = "student" | "instructor" | "admin";
 
@@ -28,6 +30,8 @@ const allItems: NavigationItem[] = [
     { id: "settings", label: "Indstillinger" },
     { id: "adminStudents", label: "Studerende" },
     { id: "adminInstructors", label: "Instruktørere" },
+    { id: "instructorStudents", label: "Studerende" },
+    { id: "CreateInstructor", label: "Ny Instruktør"}
 ];
 
 function MinSide() {
@@ -44,14 +48,16 @@ function MinSide() {
 
         if (role === "instructor") {
             return allItems.filter(
-                (item) => item.id !== "adminInstructors"
+                (item) => item.id !== "adminInstructors" &&
+                item.id !== "adminStudents"
             );
         }
 
         return allItems.filter(
             (item) =>
                 item.id !== "adminStudents" &&
-                item.id !== "adminInstructors"
+                item.id !== "adminInstructors" &&
+                item.id !== "instructorStudents"
         );
     }, [role]);
 
@@ -125,6 +131,16 @@ function MinSide() {
                 {active === "adminStudents" && (
                     <div className="contentCard">
                         <AdminStudentView />
+                    </div>
+                )}
+                {active === "instructorStudents" && (
+                    <div className="contentCard">
+                        <InstructorStudentView/>
+                    </div>
+                )}
+                {active === "CreateInstructor" && (
+                    <div className="contentCard">
+                        <CreateNewInstructor/>
                     </div>
                 )}
             </div>

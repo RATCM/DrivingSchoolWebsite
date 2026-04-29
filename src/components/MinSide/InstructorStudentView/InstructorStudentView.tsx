@@ -1,6 +1,5 @@
-import "./AdminStudentview.css";
+import "./InstructorStudentView.css";
 import { useEffect, useState } from "react";
-import {API_BASE_URL} from "../../../Api/config";
 
 type Student = {
     id: string;
@@ -15,30 +14,51 @@ type Student = {
     drivingLessons?: unknown;
 };
 
-function AdminStudentView() {
+function InstructorStudentView() {
     const [students, setStudents] = useState<Student[]>([]);
     const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
     const [loading, setLoading] = useState(true);
     const [detailsLoading, setDetailsLoading] = useState(false);
     const [error, setError] = useState("");
-    const baseuri = API_BASE_URL;
-
+    const myId = localStorage.getItem("myId");
     const accessToken = localStorage.getItem("access_token");
 
     const authHeaders = {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
     };
-
+    const fetchDrivingSchool = async () => {
+        if (!accessToken) {
+            setError("No access token found. Please log in again.");
+            setLoading(false);
+            return;
+        }
+        try {
+            const response = await fetch(`http://localhost:5259/instructor/${myId}`, {
+                method: "GET",
+                headers: authHeaders,
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to fetch drivingschool. Status: ${response.status}`);
+            }
+            const data = await response.json();
+            return data.drivingSchoolId;
+        }
+        catch (err) {
+            console.error(err);
+            setError("Could not load drivingschool.");
+        }
+    }
     const fetchStudents = async () => {
         if (!accessToken) {
             setError("No access token found. Please log in again.");
             setLoading(false);
             return;
         }
+        const myDrivingSchool = await fetchDrivingSchool();
 
         try {
-            const response = await fetch(baseuri + "student", {
+            const response = await fetch(`http://localhost:5259/drivingschool/${myDrivingSchool}/student`, {
                 method: "GET",
                 headers: authHeaders,
             });
@@ -62,7 +82,7 @@ function AdminStudentView() {
         setError("");
 
         try {
-            const response = await fetch(baseuri + `student/${id}`, {
+            const response = await fetch(`http://localhost:5259/student/${id}`, {
                 method: "GET",
                 headers: authHeaders,
             });
@@ -84,7 +104,7 @@ function AdminStudentView() {
     const deleteStudent = async (id: string) => {
         try {
             const response = await fetch(
-                baseuri + `student/${id}`,
+                `http://localhost:5259/student/${id}`,
                 {
                     method: "DELETE",
                     headers: authHeaders,
@@ -183,4 +203,4 @@ function AdminStudentView() {
     );
 }
 
-export default AdminStudentView;
+export default InstructorStudentView;

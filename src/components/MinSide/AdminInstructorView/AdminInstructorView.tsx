@@ -1,5 +1,6 @@
 import "./AdminInstructorView.css";
 import { useEffect, useState } from "react";
+import {API_BASE_URL} from "../../../Api/config";
 
 type Instructor = {
     id: string;
@@ -26,7 +27,7 @@ function AdminInstructorView() {
     const [loading, setLoading] = useState(true);
     const [detailsLoading, setDetailsLoading] = useState(false);
     const [error, setError] = useState("");
-
+    const baseuri = API_BASE_URL
     const accessToken = localStorage.getItem("access_token");
 
     const authHeaders = {
@@ -42,7 +43,7 @@ function AdminInstructorView() {
         }
 
         try {
-            const response = await fetch("http://localhost:5259/instructor", {
+            const response = await fetch(baseuri + "instructor", {
                 method: "GET",
                 headers: authHeaders,
             });
@@ -66,7 +67,7 @@ function AdminInstructorView() {
         setError("");
 
         try {
-            const response = await fetch(`http://localhost:5259/instructor/${id}`, {
+            const response = await fetch(baseuri + `instructor/${id}`, {
                 method: "GET",
                 headers: authHeaders,
             });
@@ -86,7 +87,7 @@ function AdminInstructorView() {
     };
     const fetchSchools = async () => {
         try {
-            const response = await fetch("http://localhost:5259/drivingschool", {
+            const response = await fetch(baseuri + "drivingschool", {
                 method: "GET",
                 headers: authHeaders,
             });
@@ -111,7 +112,7 @@ function AdminInstructorView() {
     const deleteInstructor = async (id: string) => {
         try {
             const response = await fetch(
-                `http://localhost:5259/instructor/${id}`,
+                baseuri + `instructor/${id}`,
                 {
                     method: "DELETE",
                     headers: authHeaders,
