@@ -1,0 +1,71 @@
+.InstructorHeader {
+    display: grid;
+    grid-template-columns: 1.5fr 1.5fr 2fr 1fr;
+    gap: 16px;
+    padding: 12px 20px;
+    font-weight: bold;
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.InstructorRow {
+    display: grid;
+    grid-template-columns: 1.5fr 1.5fr 2fr 1fr;
+    gap: 16px;
+    padding: 18px 20px;
+    border-radius: 20px;
+    background: #e7e7e7;
+    margin-bottom: 14px;
+    align-items: start;
+}
+
+.InstructorRow span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.instructorRowButton {
+    width: 100%;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+}
+
+.instructorRowButton:hover {
+    background: #d7d7d7;
+}
+
+.InstructorDetails {
+    background: #e7e7e7;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.InstructorDetails pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.deleteButton {
+    background: #d32f2f;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 18px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.deleteButton:hover {
+    background: #b71c1c;
+}
+
+.backButton {
+    margin-bottom: 16px;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+}
