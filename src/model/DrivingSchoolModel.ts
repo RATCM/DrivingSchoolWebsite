@@ -1,24 +1,23 @@
+import StreetsAddressModel from "./Submodels/StreetsAddressModel";
+
 class DrivingSchoolModel {
     schoolName: string;
     phone: string;
     website: string;
-    address: string;
-    region: string;
+    streetAddress: StreetsAddressModel;
     pricing: number;
 
     constructor(
         schoolName: string,
         phone: string,
         website: string,
-        address: string,
-        region: string,
+        streetAddress: StreetsAddressModel,
         pricing: number,
     ) {
         this.schoolName = schoolName;
         this.phone = phone;
         this.website = website;
-        this.address = address;
-        this.region = region;
+        this.streetAddress = streetAddress;
         this.pricing = pricing;
     }
 }
