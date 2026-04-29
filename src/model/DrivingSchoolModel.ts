@@ -1,25 +1,25 @@
+import StreetsAddressModel from "./Submodels/StreetsAddressModel";
+import Package from "./Submodels/Package";
+
 class DrivingSchoolModel {
     schoolName: string;
     phone: string;
     website: string;
-    address: string;
-    region: string;
-    pricing: number;
+    streetAddress: StreetsAddressModel;
+    packages: Package[]
 
     constructor(
         schoolName: string,
         phone: string,
         website: string,
-        address: string,
-        region: string,
-        pricing: number,
+        streetAddress: StreetsAddressModel,
+        packages: Package[],
     ) {
         this.schoolName = schoolName;
         this.phone = phone;
         this.website = website;
-        this.address = address;
-        this.region = region;
-        this.pricing = pricing;
+        this.streetAddress = streetAddress;
+        this.packages = packages;
     }
 }
 export default DrivingSchoolModel;

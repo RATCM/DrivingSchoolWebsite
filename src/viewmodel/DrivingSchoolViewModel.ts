@@ -13,8 +13,8 @@ export function mapDrivingSchoolViewModel(model: DrivingSchoolModel): DrivingSch
         schoolName: `${model.schoolName}`,
         phone: `${model.phone}`,
         website: `${model.website}`,
-        address: `${model.address}`,
-        region: `${model.region}`,
+        address: `${model.streetAddress.address}`+ `, ` + `${model.streetAddress.postalCode}` + ` ` + `${model.streetAddress.city}`,
+        region: `${model.streetAddress.region}`,
         pricing: `${model.pricing}`,
     }
 }
