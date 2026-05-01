@@ -66,6 +66,8 @@
     margin-bottom: 1.78vh;
     border: none;
     border-radius: 1.33vh;
+    background-color: #1f6feb;
+    color: white;
     padding: 1.11vh 1.55vh;
     cursor: pointer;
 }

@@ -115,7 +115,7 @@ function InstructorStudentView() {
 
             {!selectedStudent && (
                 <>
-                    <div className="StudentHeader">
+                    <div className="studentHeader">
                         <span>ID</span>
                         <span>Name</span>
                         <span>Email</span>
@@ -129,7 +129,7 @@ function InstructorStudentView() {
                             onClick={() => fetchStudentById(student.id)}
                             type="button"
                         >
-                            <span>{student.id}</span>
+                            <span>{student.id.replaceAll("-", "-\u200B")}</span>
                             <span>
                                 {student.studentName?.firstName} {student.studentName?.lastName}
                             </span>
@@ -153,8 +153,8 @@ function InstructorStudentView() {
                     </button>
 
                     <h3>
-                        {selectedStudent.studentName?.firstName}{" "}
-                        {selectedStudent.studentName?.lastName}
+                        <strong>{selectedStudent.studentName?.firstName}{" "}
+                        {selectedStudent.studentName?.lastName}</strong>
                     </h3>
 
                     <p><strong>ID:</strong> {selectedStudent.id}</p>
@@ -162,9 +162,7 @@ function InstructorStudentView() {
                     <p><strong>Email:</strong> {selectedStudent.emailAddress}</p>
                     <p><strong>Phone:</strong> {selectedStudent.phoneNumber}</p>
 
-                    <pre>
-                        {JSON.stringify(selectedStudent, null, 2)}
-                    </pre>
+
 
                     <button
                         className="deleteButton"

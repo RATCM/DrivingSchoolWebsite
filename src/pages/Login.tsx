@@ -46,8 +46,7 @@ function Login() {
         
         navigate("/min_side");
     } catch (error) {
-        console.error(error);
-        navigate("/koreskoler");
+        return <span>Forkert Brugernavn eller Adgangskode</span>
         }
     };
     return (

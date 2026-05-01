@@ -147,7 +147,6 @@ function AdminInstructorView() {
                     <p><strong>Email:</strong> {selectedInstructor.emailAddress}</p>
                     <p><strong>Phone:</strong> {selectedInstructor.phoneNumber}</p>
 
-                    <pre>{JSON.stringify(selectedInstructor, null, 2)}</pre>
 
                     <button
                         className="deleteButton"

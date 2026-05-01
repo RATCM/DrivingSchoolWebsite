@@ -14,9 +14,14 @@ type Student = {
     theoryLessons?: unknown;
     drivingLessons?: unknown;
 };
+type School = {
+    id: string;
+    name: string;
+};
 
 function AdminStudentView() {
     const [students, setStudents] = useState<Student[]>([]);
+    const [schools, setSchools] = useState<Record<string, string>>({});
     const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
     const [loading, setLoading] = useState(true);
     const [detailsLoading, setDetailsLoading] = useState(false);
@@ -33,6 +38,21 @@ function AdminStudentView() {
             setLoading(false);
         }
     };
+    const fetchSchools = async () => {
+        try {
+            const data: School[] = await apiRequest<School[]>('drivingschool');
+
+            const schoolMap: Record<string, string> = {};
+            data.forEach((school) => {
+                schoolMap[school.id] = school.name;
+            });
+
+            setSchools(schoolMap);
+        } catch (err) {
+            console.error(err);
+            setError("Could not load schools.");
+        }
+    };
 
     const fetchStudentById = async (id: string) => {
         setDetailsLoading(true);
@@ -40,7 +60,7 @@ function AdminStudentView() {
 
         try {
 
-            const data = await apiRequest<Student>('student');
+            const data = await apiRequest<Student>(`student/${id}`);
             setSelectedStudent(data);
         } catch (err) {
             console.error(err);
@@ -64,6 +84,7 @@ function AdminStudentView() {
 
     useEffect(() => {
         fetchStudents();
+        fetchSchools();
     }, []);
 
     if (loading) {
@@ -80,30 +101,29 @@ function AdminStudentView() {
                 <>
                     <div className="StudentHeader">
                         <span>ID</span>
-                        <span>Name</span>
                         <span>Email</span>
-                        <span>Phone</span>
+                        <span>Køreskole</span>
+                        <span>Telefon nummer</span>
                     </div>
 
                     {students.map((student) => (
                         <button
-                            className="DrivingHistory studentRowButton"
+                            className="StudentRow studentRowButton"
                             key={student.id}
                             onClick={() => fetchStudentById(student.id)}
                             type="button"
                         >
                             <span>{student.id}</span>
-                            <span>
-                                {student.studentName?.firstName} {student.studentName?.lastName}
-                            </span>
                             <span>{student.emailAddress}</span>
+                            <span>{schools[student.schoolId ?? ""] ?? "Unknown school"}</span>
+
                             <span>{student.phoneNumber}</span>
                         </button>
                     ))}
                 </>
             )}
 
-            {detailsLoading && <p>Loading student details...</p>}
+            {detailsLoading && <p>Loading instructor details...</p>}
 
             {selectedStudent && !detailsLoading && (
                 <div className="StudentDetails">
@@ -112,12 +132,14 @@ function AdminStudentView() {
                         onClick={() => setSelectedStudent(null)}
                         type="button"
                     >
-                        Back to students
+                        Back to student overview
                     </button>
 
                     <h3>
+                        <strong>
                         {selectedStudent.studentName?.firstName}{" "}
                         {selectedStudent.studentName?.lastName}
+                        </strong>
                     </h3>
 
                     <p><strong>ID:</strong> {selectedStudent.id}</p>
@@ -125,9 +147,6 @@ function AdminStudentView() {
                     <p><strong>Email:</strong> {selectedStudent.emailAddress}</p>
                     <p><strong>Phone:</strong> {selectedStudent.phoneNumber}</p>
 
-                    <pre>
-                        {JSON.stringify(selectedStudent, null, 2)}
-                    </pre>
 
                     <button
                         className="deleteButton"

@@ -73,23 +73,11 @@ function AdminViewDrivingSchool() {
                 (_, index) => index !== packageIndex
             );
 
-            const updateBody = {
-                name: selectedDrivingSchool.Name,
-                streetAddress: {
-                    postalCode: selectedDrivingSchool.StreetAddress.PostalCode,
-                    city: selectedDrivingSchool.StreetAddress.City,
-                    region: selectedDrivingSchool.StreetAddress.Region,
-                    addressLine: selectedDrivingSchool.StreetAddress.AddressLine,
-                },
-                phoneNumber: selectedDrivingSchool.PhoneNumber,
-                webAddress: selectedDrivingSchool.WebAddress,
-                packages: updatedPackages,
-            };
 
             const data = await apiRequest<DrivingSchoolGetDTO>(
                 `drivingschool/${selectedDrivingSchool.id}`,
                 "PUT",
-                updateBody
+                selectedDrivingSchool
             );
 
             const updatedDrivingSchool = GetDTOtoModel(data);
