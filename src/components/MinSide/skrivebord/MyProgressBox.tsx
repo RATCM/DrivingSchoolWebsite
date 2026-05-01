@@ -1,13 +1,23 @@
-import React from 'react';
+import React from "react";
 import "./MyProgressBox.css";
-import history from "../../Functions/History";
+import { useHistory } from "../../Functions/History";
 
 function MyProgressBox() {
-    
     const total = 16;
-    const totalCompleted = history();
-    const progress = totalCompleted.filter(a => a.type === "Køretime").length+totalCompleted.filter(a => a.type === "Natkørsel").length+totalCompleted.filter(a => a.type === "Motorvej").length;
-    const hastype = (type:string) => totalCompleted.some(a => a.type === type);
+    const { history, loading, error } = useHistory();
+
+    const progress = history.length;
+
+    const hasObjective = (
+        objective: keyof typeof history[number]["completedObjectives"]
+    ) => {
+        return history.some(
+            lesson => lesson.completedObjectives?.[objective] === true
+        );
+    };
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
 
     return (
         <div className="cardBox">
@@ -16,8 +26,9 @@ function MyProgressBox() {
             <h3>Køretimer</h3>
 
             <div className="myprogressBar">
-                <div className="myprogressFill"
-                style={{ width: `${(progress / total) * 100}%` }}
+                <div
+                    className="myprogressFill"
+                    style={{ width: `${(progress / total) * 100}%` }}
                 />
             </div>
 
@@ -25,17 +36,62 @@ function MyProgressBox() {
                 Du har fuldført {progress} ud af {total} køretimer
             </p>
 
-            <h3 style={{marginTop:20}}>Checkliste</h3>
+            <h3 style={{ marginTop: 20 }}>Checkliste</h3>
 
             <div className="mychecklist">
-                <label><span>Banekørsel</span>
-                <input type="checkbox" checked={hastype("Banekørsel")} readOnly/></label>
-                <label><span>Glatbane</span><input type="checkbox" checked={hastype("Glatbane")} readOnly/></label>
-                <label><span>Natkørsel</span><input type="checkbox" checked={hastype("Natkørsel")} readOnly/></label>
-                <label><span>Motorvej</span><input type="checkbox" checked={hastype("Motorvej")} readOnly/></label>
-                <label><span>Førstehjælp</span><input type="checkbox" checked={hastype("Førstehjælp")} readOnly/></label>
-                <label><span>Teoriprøve</span><input type="checkbox" checked={hastype("Teoriprøve")} readOnly/></label>
-                <label><span>Køreprøve</span><input type="checkbox" checked={hastype("Køreprøve")} readOnly/></label>
+                <label>
+                    <span>Vigepligt</span>
+                    <input
+                        type="checkbox"
+                        checked={hasObjective("rightOfWay")}
+                        readOnly
+                    />
+                </label>
+
+                <label>
+                    <span>Motorvej</span>
+                    <input
+                        type="checkbox"
+                        checked={hasObjective("highway")}
+                        readOnly
+                    />
+                </label>
+
+                <label>
+                    <span>Natkørsel</span>
+                    <input
+                        type="checkbox"
+                        checked={hasObjective("night")}
+                        readOnly
+                    />
+                </label>
+
+                <label>
+                    <span>Trepunktsvending</span>
+                    <input
+                        type="checkbox"
+                        checked={hasObjective("threePointTurn")}
+                        readOnly
+                    />
+                </label>
+
+                <label>
+                    <span>Bak om hjørne</span>
+                    <input
+                        type="checkbox"
+                        checked={hasObjective("reverseAroundCorner")}
+                        readOnly
+                    />
+                </label>
+
+                <label>
+                    <span>Parallelparkering</span>
+                    <input
+                        type="checkbox"
+                        checked={hasObjective("parallelParking")}
+                        readOnly
+                    />
+                </label>
             </div>
         </div>
     );

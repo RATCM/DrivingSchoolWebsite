@@ -1,6 +1,6 @@
 .DrivingHistory {
     display: grid;
-    grid-template-columns: 80px 60px 100px 100px 1fr;
+    grid-template-columns: 1fr 1fr 2fr 2fr;
     gap: 10px;
     padding: 10px 12px;
     border-radius: 20px;
@@ -11,4 +11,13 @@
 .DrivingHistory.highlighted {
     background: #7fb3ff;
     color: white;
+}
+.DrivingHistoryHeader {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr 2fr;
+    gap: 0.94vw;
+    padding: 0.706vw 1.176vw;
+    font-weight: bold;
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 10px;
 }

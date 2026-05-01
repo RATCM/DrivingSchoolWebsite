@@ -1,93 +1,161 @@
 import "./AdminStudentview.css";
 import { useEffect, useState } from "react";
+import {apiRequest} from "../../../Api/apiRequest";
 
 type Student = {
-    id?: string;
+    id: string;
     schoolId?: string;
+    studentName?: {
+        firstName?: string;
+        lastName?: string;
+    };
     emailAddress?: string;
     phoneNumber?: string;
+    theoryLessons?: unknown;
+    drivingLessons?: unknown;
+};
+type School = {
+    id: string;
+    name: string;
 };
 
 function AdminStudentView() {
     const [students, setStudents] = useState<Student[]>([]);
+    const [schools, setSchools] = useState<Record<string, string>>({});
+    const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
     const [loading, setLoading] = useState(true);
+    const [detailsLoading, setDetailsLoading] = useState(false);
     const [error, setError] = useState("");
 
+    const fetchStudents = async () => {
+        try {
+            const data = await apiRequest<Student[]>('student');
+            setStudents(data);
+        } catch (err) {
+            console.error(err);
+            setError("Could not load students.");
+        } finally {
+            setLoading(false);
+        }
+    };
+    const fetchSchools = async () => {
+        try {
+            const data: School[] = await apiRequest<School[]>('drivingschool');
+
+            const schoolMap: Record<string, string> = {};
+            data.forEach((school) => {
+                schoolMap[school.id] = school.name;
+            });
+
+            setSchools(schoolMap);
+        } catch (err) {
+            console.error(err);
+            setError("Could not load schools.");
+        }
+    };
+
+    const fetchStudentById = async (id: string) => {
+        setDetailsLoading(true);
+        setError("");
+
+        try {
+
+            const data = await apiRequest<Student>(`student/${id}`);
+            setSelectedStudent(data);
+        } catch (err) {
+            console.error(err);
+            setError("Could not load student details.");
+        } finally {
+            setDetailsLoading(false);
+        }
+    };
+
+    const deleteStudent = async (id: string) => {
+        try {
+            await apiRequest<void>(`student/${id}`, "DELETE");
+
+            setSelectedStudent(null);
+            setStudents((prev) => prev.filter((student) => student.id !== id));
+        } catch (err) {
+            console.error(err);
+            setError("Could not delete student.");
+        }
+    };
+
     useEffect(() => {
-        const fetchStudents = async () => {
-            const accessToken = localStorage.getItem("access_token");
-
-            if (!accessToken) {
-                setError("No access token found. Please log in again.");
-                setLoading(false);
-                return;
-            }
-
-            try {
-                const response = await fetch("http://localhost:5259/student", {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        "Content-Type": "application/json",
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch students. Status: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                setStudents(data);
-            } catch (err) {
-                console.error(err);
-                setError("Could not load students.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
         fetchStudents();
+        fetchSchools();
     }, []);
 
     if (loading) {
-        return (
-            <div className="cardBox">
-                <h2>Studerende</h2>
-                <p>Loading students...</p>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className="cardBox">
-                <h2>Studerende</h2>
-                <p>{error}</p>
-            </div>
-        );
+        return <p>Loading students...</p>;
     }
 
     return (
         <div className="cardBox">
             <h2>Studerende</h2>
-            <div className="StudentHeader">
-                <span>ID</span>
-                <span>Email</span>
-                <span>SkoleId</span>
-                <span>Telefon nummer</span>
-            </div>
-            {students.length === 0 ? (
-                <p>No students found.</p>
-            ) : (
-                students.map((student, i) => (
-                    <div className="DrivingHistory" key={student.id ?? i}>
-                        <span>{student.id ?? "No ID"}</span>
-                        <span>{student.emailAddress ?? "No name"}</span>
-                        <span>{student.schoolId ?? "No email"}</span>
-                        <span>{student.phoneNumber ?? ""}</span>
+
+            {error && <p>{error}</p>}
+
+            {!selectedStudent && (
+                <>
+                    <div className="StudentHeader">
+                        <span>ID</span>
+                        <span>Email</span>
+                        <span>Køreskole</span>
+                        <span>Telefon nummer</span>
                     </div>
-                ))
+
+                    {students.map((student) => (
+                        <button
+                            className="StudentRow studentRowButton"
+                            key={student.id}
+                            onClick={() => fetchStudentById(student.id)}
+                            type="button"
+                        >
+                            <span>{student.id}</span>
+                            <span>{student.emailAddress}</span>
+                            <span>{schools[student.schoolId ?? ""] ?? "Unknown school"}</span>
+
+                            <span>{student.phoneNumber}</span>
+                        </button>
+                    ))}
+                </>
+            )}
+
+            {detailsLoading && <p>Loading instructor details...</p>}
+
+            {selectedStudent && !detailsLoading && (
+                <div className="StudentDetails">
+                    <button
+                        className="backButton"
+                        onClick={() => setSelectedStudent(null)}
+                        type="button"
+                    >
+                        Back to student overview
+                    </button>
+
+                    <h3>
+                        <strong>
+                        {selectedStudent.studentName?.firstName}{" "}
+                        {selectedStudent.studentName?.lastName}
+                        </strong>
+                    </h3>
+
+                    <p><strong>ID:</strong> {selectedStudent.id}</p>
+                    <p><strong>School ID:</strong> {selectedStudent.schoolId}</p>
+                    <p><strong>Email:</strong> {selectedStudent.emailAddress}</p>
+                    <p><strong>Phone:</strong> {selectedStudent.phoneNumber}</p>
+
+
+                    <button
+                        className="deleteButton"
+                        onClick={() => deleteStudent(selectedStudent.id)}
+                        type="button"
+                    >
+                        Delete student
+                    </button>
+                </div>
             )}
         </div>
     );

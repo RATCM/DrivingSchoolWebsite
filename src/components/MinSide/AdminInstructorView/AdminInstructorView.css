@@ -1,34 +1,73 @@
-/* Header row */
 .InstructorHeader {
     display: grid;
     grid-template-columns: 1.5fr 1.5fr 2fr 1fr;
-    gap: 16px;
-    padding: 12px 20px;
+    gap: 0.94vw;
+    padding: 0.706vw 1.176vw;
     font-weight: bold;
     border-bottom: 2px solid #ccc;
     margin-bottom: 10px;
 }
 
-/* Each student row */
-.DrivingHistory {
+.InstructorRow {
     display: grid;
     grid-template-columns: 1.5fr 1.5fr 2fr 1fr;
-    gap: 16px;
-    padding: 18px 20px;
+    gap: 1.77vh;
+    padding: 2vh 1.18vw;
     border-radius: 20px;
     background: #e7e7e7;
-    margin-bottom: 14px;
+    margin-bottom: 1.55vh;
     align-items: start;
 }
 
-/* Allow long text (IDs) to wrap nicely */
-.DrivingHistory span {
+.InstructorRow span {
     min-width: 0;
     overflow-wrap: anywhere;
     word-break: break-word;
 }
 
-.DrivingHistory.highlighted {
-    background: #7fb3ff;
+.instructorRowButton {
+    width: 100%;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+}
+
+.instructorRowButton:hover {
+    background: #d7d7d7;
+}
+
+.InstructorDetails {
+    background: #e7e7e7;
+    border-radius: 2.22vh;
+    padding: 2.22vh;
+}
+
+.InstructorDetails pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.deleteButton {
+    background: #d32f2f;
     color: white;
+    border: none;
+    border-radius: 1.333vh;
+    padding: 1.33vh 2vh;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.deleteButton:hover {
+    background: #b71c1c;
+}
+
+.backButton {
+    margin-bottom: 1.78vh;
+    border: none;
+    border-radius: 1.33vh;
+    background-color: #1f6feb;
+    color: white;
+    padding: 1.11vh 1.55vh;
+    cursor: pointer;
 }

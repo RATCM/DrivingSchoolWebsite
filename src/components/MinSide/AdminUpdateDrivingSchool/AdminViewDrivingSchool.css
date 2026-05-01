@@ -1,0 +1,109 @@
+.DrivingSchoolHeader {
+    display: grid;
+    grid-template-columns: 1.5fr 1.5fr 2fr 1fr;
+    gap: 16px;
+    padding: 12px 20px;
+    font-weight: bold;
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.DrivingSchoolRow {
+    display: grid;
+    grid-template-columns: 1.5fr 1.5fr 2fr 1fr;
+    gap: 16px;
+    padding: 18px 20px;
+    border-radius: 20px;
+    background: #e7e7e7;
+    margin-bottom: 14px;
+    align-items: start;
+}
+
+.DrivingSchoolRow span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.DrivingSchoolRowButton {
+    width: 100%;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+}
+
+.DrivingSchoolRowButton:hover {
+    background: #d7d7d7;
+}
+
+.DrivingSchoolDetails {
+    background: #e7e7e7;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.DrivingSchoolDetails pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.deleteButton {
+    background: #d32f2f;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 18px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.deleteButton:hover {
+    background: #b71c1c;
+}
+
+.backButton {
+    margin-bottom: 16px;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+}
+.PackageBox {
+    border: 1px solid #d0d0d0;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.PackageRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr 0.5fr 0.5fr;
+    gap: 10px;
+    align-items: center;
+}
+
+.PackageDescription {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 6px;
+}
+
+.expandButton {
+    padding: 0.667vh 0.589vw;
+    cursor: pointer;
+    background-color: lightskyblue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.deletePackageButton {
+    padding: 0.667vh 0.589vw;
+    cursor: pointer;
+    background-color: #c62828;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
