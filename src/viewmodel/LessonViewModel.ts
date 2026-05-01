@@ -14,6 +14,6 @@ export function mapLessonViewModel(model: lessonModel): LessonViewModel {
         instructor: `${model.instructor.name}`,
         instructorSignature: `${model.instructorSignature}`,
         price: `${model.price}`,
-        drivingSchool: `${model.drivingSchool.schoolName}`,
+        drivingSchool: `${model.drivingSchool.Name}`,
     }
 }

@@ -1,11 +1,11 @@
 import "./AdminInstructorView.css";
 import { useEffect, useState } from "react";
-import {API_BASE_URL} from "../../../Api/config";
+import {apiRequest} from "../../../Api/apiRequest";
 
 type Instructor = {
     id: string;
     schoolId?: string;
-    instructorName?: {
+    name?: {
         firstName?: string;
         lastName?: string;
     };
@@ -27,32 +27,11 @@ function AdminInstructorView() {
     const [loading, setLoading] = useState(true);
     const [detailsLoading, setDetailsLoading] = useState(false);
     const [error, setError] = useState("");
-    const baseuri = API_BASE_URL
-    const accessToken = localStorage.getItem("access_token");
-
-    const authHeaders = {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-    };
 
     const fetchInstructors = async () => {
-        if (!accessToken) {
-            setError("No access token found. Please log in again.");
-            setLoading(false);
-            return;
-        }
-
         try {
-            const response = await fetch(baseuri + "instructor", {
-                method: "GET",
-                headers: authHeaders,
-            });
 
-            if (!response.ok) {
-                throw new Error(`Failed to fetch instructors. Status: ${response.status}`);
-            }
-
-            const data = await response.json();
+            const data = await apiRequest<Instructor[]>("instructor");
             setInstructors(data);
         } catch (err) {
             console.error(err);
@@ -67,16 +46,9 @@ function AdminInstructorView() {
         setError("");
 
         try {
-            const response = await fetch(baseuri + `instructor/${id}`, {
-                method: "GET",
-                headers: authHeaders,
-            });
 
-            if (!response.ok) {
-                throw new Error(`Failed to fetch instructor. Status: ${response.status}`);
-            }
 
-            const data = await response.json();
+            const data = await apiRequest<Instructor>(`instructor/${id}`);
             setSelectedInstructor(data);
         } catch (err) {
             console.error(err);
@@ -87,16 +59,7 @@ function AdminInstructorView() {
     };
     const fetchSchools = async () => {
         try {
-            const response = await fetch(baseuri + "drivingschool", {
-                method: "GET",
-                headers: authHeaders,
-            });
-
-            if (!response.ok) {
-                throw new Error(`Failed to fetch schools. Status: ${response.status}`);
-            }
-
-            const data: School[] = await response.json();
+            const data: School[] = await apiRequest<School[]>('drivingschool');
 
             const schoolMap: Record<string, string> = {};
             data.forEach((school) => {
@@ -111,17 +74,7 @@ function AdminInstructorView() {
     };
     const deleteInstructor = async (id: string) => {
         try {
-            const response = await fetch(
-                baseuri + `instructor/${id}`,
-                {
-                    method: "DELETE",
-                    headers: authHeaders,
-                }
-            );
-
-            if (!response.ok) {
-                throw new Error(`Failed to delete instructor. Status: ${response.status}`);
-            }
+            await apiRequest<void>(`instructor/${id}`, "DELETE")
 
             setSelectedInstructor(null);
             setInstructors((prev) => prev.filter((instructor) => instructor.id !== id));
@@ -151,8 +104,8 @@ function AdminInstructorView() {
                     <div className="InstructorHeader">
                         <span>ID</span>
                         <span>Email</span>
-                        <span>SchoolId</span>
-                        <span>Phone</span>
+                        <span>Køreskole</span>
+                        <span>Telefon nummer</span>
                     </div>
 
                     {instructors.map((instructor) => (
@@ -185,8 +138,8 @@ function AdminInstructorView() {
                     </button>
 
                     <h3>
-                        {selectedInstructor.instructorName?.firstName}{" "}
-                        {selectedInstructor.instructorName?.lastName}
+                        {selectedInstructor.name?.firstName}{" "}
+                        {selectedInstructor.name?.lastName}
                     </h3>
 
                     <p><strong>ID:</strong> {selectedInstructor.id}</p>

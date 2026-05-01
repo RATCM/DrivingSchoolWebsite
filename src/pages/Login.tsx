@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./Login.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import {API_BASE_URL} from "../Api/config";
 
 
 function Login() {
@@ -11,13 +12,14 @@ function Login() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const inviteToken = searchParams.get("invite_token");
+    const baseuri = API_BASE_URL
     
     /*Add call to Login method on backend to log in*/
     const handleLogin = async () => {
         
     try {
         //const uri = "http://localhost:5259/admin/login";
-        const uri = "http://localhost:5259/auth/login/" + role;
+        const uri =baseuri + "auth/login/" + role;
         
         const response = await fetch(uri, {
             method: "POST",
@@ -38,8 +40,8 @@ function Login() {
         const data = await response.json();
 
         // store JWT or session
-        localStorage.setItem("access_token", data.accessToken);
-        localStorage.setItem("refresh_token", data.refreshToken);
+        localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("refreshToken", data.refreshToken);
         document.cookie = `role=${role}; path=/; max-age=86400`;
         
         navigate("/min_side");

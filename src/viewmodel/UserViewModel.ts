@@ -20,6 +20,6 @@ export function mapUserViewModel(model: UserModel): UserViewModel {
         name: `${model.name}`,
         email: `${model.email}`,
         phone: `${model.phone}`,
-        drivingSchool: `${model.drivingSchool.schoolName}`,
+        drivingSchool: `${model.drivingSchool.Name}`,
     }
 }

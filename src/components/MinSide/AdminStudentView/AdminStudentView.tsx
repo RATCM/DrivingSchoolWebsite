@@ -1,6 +1,6 @@
 import "./AdminStudentview.css";
 import { useEffect, useState } from "react";
-import {API_BASE_URL} from "../../../Api/config";
+import {apiRequest} from "../../../Api/apiRequest";
 
 type Student = {
     id: string;
@@ -21,33 +21,10 @@ function AdminStudentView() {
     const [loading, setLoading] = useState(true);
     const [detailsLoading, setDetailsLoading] = useState(false);
     const [error, setError] = useState("");
-    const baseuri = API_BASE_URL;
-
-    const accessToken = localStorage.getItem("access_token");
-
-    const authHeaders = {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-    };
 
     const fetchStudents = async () => {
-        if (!accessToken) {
-            setError("No access token found. Please log in again.");
-            setLoading(false);
-            return;
-        }
-
         try {
-            const response = await fetch(baseuri + "student", {
-                method: "GET",
-                headers: authHeaders,
-            });
-
-            if (!response.ok) {
-                throw new Error(`Failed to fetch students. Status: ${response.status}`);
-            }
-
-            const data = await response.json();
+            const data = await apiRequest<Student[]>('student');
             setStudents(data);
         } catch (err) {
             console.error(err);
@@ -62,16 +39,8 @@ function AdminStudentView() {
         setError("");
 
         try {
-            const response = await fetch(baseuri + `student/${id}`, {
-                method: "GET",
-                headers: authHeaders,
-            });
 
-            if (!response.ok) {
-                throw new Error(`Failed to fetch student. Status: ${response.status}`);
-            }
-
-            const data = await response.json();
+            const data = await apiRequest<Student>('student');
             setSelectedStudent(data);
         } catch (err) {
             console.error(err);
@@ -83,17 +52,7 @@ function AdminStudentView() {
 
     const deleteStudent = async (id: string) => {
         try {
-            const response = await fetch(
-                baseuri + `student/${id}`,
-                {
-                    method: "DELETE",
-                    headers: authHeaders,
-                }
-            );
-
-            if (!response.ok) {
-                throw new Error(`Failed to delete student. Status: ${response.status}`);
-            }
+            await apiRequest<void>(`student/${id}`, "DELETE");
 
             setSelectedStudent(null);
             setStudents((prev) => prev.filter((student) => student.id !== id));
