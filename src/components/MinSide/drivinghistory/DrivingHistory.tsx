@@ -1,5 +1,5 @@
 import "./DrivingHistory.css";
-import getAppointments, { getHistory } from "../../Functions/History";
+import getAppointments, { useHistory } from "../../Functions/History";
 import { useNavigate } from "react-router-dom";
 
 
@@ -8,24 +8,36 @@ function DrivingHistory() {
     const handleClick = (id: string) => {
         navigate("/maps?driving_lesson_token=" + id);
     };
-    const History = getHistory();
+    const { history, loading, error } = useHistory();
     return (
         <div className="cardBox">
             <h2>Mine køretimer</h2>
+            <div className="DrivingHistoryHeader">
+                <span><b>Dato</b></span>
+                <span><b>Start tid</b></span>
+                <span><b>Start tid</b></span>
+                <span><b>Instruktør Id</b></span>
+            </div>
 
-            {History.map((a, i) => (
+            {history.map((a, i) => (
                 <div className="DrivingHistory" key={i}
                 onClick={() => handleClick(a.id)}
                 style={{ cursor: "pointer" }}
                 >
-                    <span>{a.date.toLocaleDateString('da-DK', {
+                    <span>{a.route.dateTimeRange.startDateTime.toLocaleDateString('da-DK', {
+                        year: 'numeric',
                     month: 'long',
                     day: 'numeric'
                     })}</span>
-                    <span>{a.time}</span>
-                    <span>{a.type}</span>
-                    <span>{a.teacher}</span>
-                    <span>{a.place}</span>
+                    <span>{a.route.dateTimeRange.startDateTime.toLocaleTimeString("da-DK", {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    })}</span>
+                    <span>{a.route.dateTimeRange.endDateTime.toLocaleTimeString("da-DK", {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    })}</span>
+                    <span>{a.instructorId}</span>
                 </div>
             ))}
 

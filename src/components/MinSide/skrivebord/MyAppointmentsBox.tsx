@@ -1,6 +1,7 @@
 import "./MyAppointmentsBox.css";
-import getAppointments from "../../Functions/Appointments";
+import getAppointments, {useAppointments} from "../../Functions/Appointments";
 import appointments from "../../Functions/Appointments";
+import {useNavigate} from "react-router-dom";
 
 type props = {
     Date: Date;
@@ -9,28 +10,38 @@ function handleClick(id: string) {
     alert(`Du klikkede på aftale med id: ${id}`);
 }
 export function MyAppointmentsBox() {
-    
-    const comingAppointments = appointments.filter(a => a.date >= new Date());
+
+
+
+    const { history, loading, error } = useAppointments();
     return (
         <div className="cardBox">
-            <h2><b>Mine aktiviteter</b></h2>
-            <div className="MyAppointmentsHeader">
+            <h2>Mine køretimer</h2>
+            <div className="DrivingHistoryHeader">
                 <span><b>Dato</b></span>
-                <span><b>Tid</b></span>
-                <span><b>Type</b></span>
-                <span><b>Instruktør</b></span>
-                <span><b>Placering</b></span>
+                <span><b>Start tid</b></span>
+                <span><b>Start tid</b></span>
+                <span><b>Instruktør Id</b></span>
             </div>
-            {comingAppointments.map((a, i) => (
-                <div className="MyAppointments" key={i}>
-                    <span>{a.date.toLocaleDateString('da-DK', {
-                    month: 'long',
-                    day: 'numeric'
+
+            {history.map((a, i) => (
+                <div className="DrivingHistory" key={i}
+                     onClick={() => handleClick(a.id)}
+                     style={{ cursor: "pointer" }}
+                >
+                    <span>{a.route.dateTimeRange.startDateTime.toLocaleDateString('da-DK', {
+                        month: 'long',
+                        day: 'numeric'
                     })}</span>
-                    <span>{a.time}</span>
-                    <span>{a.type}</span>
-                    <span>{a.teacher}</span>
-                    <span>{a.place}</span>
+                    <span>{a.route.dateTimeRange.startDateTime.toLocaleTimeString("da-DK", {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    })}</span>
+                    <span>{a.route.dateTimeRange.endDateTime.toLocaleTimeString("da-DK", {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    })}</span>
+                    <span>{a.instructorId}</span>
                 </div>
             ))}
 
@@ -39,11 +50,12 @@ export function MyAppointmentsBox() {
 }
 
 export function MyFilteredAppointmentsBox({ Date }: props) {
-    const todaysAppointments = appointments.filter(
+    const { history, loading, error } = useAppointments();
+    const todaysAppointments = history.filter(
         (a) =>
-            a.date.getDate() === Date.getDate() &&
-            a.date.getMonth() === Date.getMonth() &&
-            a.date.getFullYear() === Date.getFullYear()
+            a.route.dateTimeRange.startDateTime.getDate() === Date.getDate() &&
+            a.route.dateTimeRange.startDateTime.getMonth() === Date.getMonth() &&
+            a.route.dateTimeRange.startDateTime.getFullYear() === Date.getFullYear()
     );
     return (
         <div className="cardBox">
@@ -60,14 +72,19 @@ export function MyFilteredAppointmentsBox({ Date }: props) {
                 onClick={() => handleClick(a.id)}
                 style={{ cursor: "pointer" }} // optional: makes it feel clickable
             >
-                    <span>{a.date.toLocaleDateString('da-DK', {
-                    month: 'long',
-                    day: 'numeric'
+                    <span>{a.route.dateTimeRange.startDateTime.toLocaleDateString('da-DK', {
+                        month: 'long',
+                        day: 'numeric'
                     })}</span>
-                    <span>{a.time}</span>
-                    <span>{a.type}</span>
-                    <span>{a.teacher}</span>
-                    <span>{a.place}</span>
+                    <span>{a.route.dateTimeRange.startDateTime.toLocaleTimeString("da-DK", {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    })}</span>
+                    <span>{a.route.dateTimeRange.endDateTime.toLocaleTimeString("da-DK", {
+                        hour: "2-digit",
+                        minute: "2-digit"
+                    })}</span>
+                    <span>{a.instructorId}</span>
                 </div>
             ))}
 

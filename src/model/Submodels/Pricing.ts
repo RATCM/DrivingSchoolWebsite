@@ -1,6 +1,6 @@
 class Pricing {
-    price: number;
-    currency: string;
+    Amount: number;
+    Currency: string;
 
 
 
@@ -8,8 +8,8 @@ class Pricing {
         price: number,
         currency: string,
     ) {
-        this.price = price;
-        this.currency = currency;
+        this.Amount = price;
+        this.Currency = currency;
     }
 }
 export default Pricing;

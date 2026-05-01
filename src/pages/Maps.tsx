@@ -1,22 +1,40 @@
-import React from "react";
-import "./Maps.css";
 import { useSearchParams } from "react-router-dom";
+import DrivingLessonRouteMap from "../components/Functions/DrivingLessonRouteMap";
+import useHistory from "../components/Functions/History";
 
-function Maps() {
+function DrivingLessonPage() {
+    const { history, loading, error } = useHistory();
     const [searchParams] = useSearchParams();
-    const DrivingLessonId = searchParams.get("driving_lesson_token");
+
+    const drivingLessonId = searchParams.get("driving_lesson_token");
+
+    const drivingLesson = history.find(
+        (lesson) => lesson.id === drivingLessonId
+    );
+
+    if (loading) {
+        return <p>Loading route...</p>;
+    }
+
+    if (error) {
+        return <p>{error}</p>;
+    }
+
+    if (!drivingLessonId) {
+        return <p>No driving lesson id was provided.</p>;
+    }
+
+    if (!drivingLesson) {
+        return <p>Could not find driving lesson with id: {drivingLessonId}</p>;
+    }
 
     return (
-        <div className="maps-page">
-            <div className="maps-content">    
-                <p className="invite-text">
-                {DrivingLessonId
-                    ? `Driving Lesson ID: ${DrivingLessonId}`
-                    : "No ID provided"}
-                </p>
-            </div>
+        <div>
+            <h1>Driving lesson route</h1>
+
+            <DrivingLessonRouteMap drivingLesson={drivingLesson} />
         </div>
     );
 }
 
-export default Maps;
+export default DrivingLessonPage;

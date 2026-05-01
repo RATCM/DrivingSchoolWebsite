@@ -1,8 +1,8 @@
 .InstructorHeader {
     display: grid;
     grid-template-columns: 1.5fr 1.5fr 2fr 1fr;
-    gap: 16px;
-    padding: 12px 20px;
+    gap: 0.94vw;
+    padding: 0.706vw 1.176vw;
     font-weight: bold;
     border-bottom: 2px solid #ccc;
     margin-bottom: 10px;
@@ -11,11 +11,11 @@
 .InstructorRow {
     display: grid;
     grid-template-columns: 1.5fr 1.5fr 2fr 1fr;
-    gap: 16px;
-    padding: 18px 20px;
+    gap: 1.77vh;
+    padding: 2vh 1.18vw;
     border-radius: 20px;
     background: #e7e7e7;
-    margin-bottom: 14px;
+    margin-bottom: 1.55vh;
     align-items: start;
 }
 
@@ -39,8 +39,8 @@
 
 .InstructorDetails {
     background: #e7e7e7;
-    border-radius: 20px;
-    padding: 20px;
+    border-radius: 2.22vh;
+    padding: 2.22vh;
 }
 
 .InstructorDetails pre {
@@ -52,8 +52,8 @@
     background: #d32f2f;
     color: white;
     border: none;
-    border-radius: 12px;
-    padding: 12px 18px;
+    border-radius: 1.333vh;
+    padding: 1.33vh 2vh;
     cursor: pointer;
     font-weight: bold;
 }
@@ -63,9 +63,11 @@
 }
 
 .backButton {
-    margin-bottom: 16px;
+    margin-bottom: 1.78vh;
     border: none;
-    border-radius: 12px;
-    padding: 10px 14px;
+    border-radius: 1.33vh;
+    background-color: #1f6feb;
+    color: white;
+    padding: 1.11vh 1.55vh;
     cursor: pointer;
 }

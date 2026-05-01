@@ -1,6 +1,6 @@
 import "./AdminStudentview.css";
 import { useEffect, useState } from "react";
-import {API_BASE_URL} from "../../../Api/config";
+import {apiRequest} from "../../../Api/apiRequest";
 
 type Student = {
     id: string;
@@ -14,40 +14,22 @@ type Student = {
     theoryLessons?: unknown;
     drivingLessons?: unknown;
 };
+type School = {
+    id: string;
+    name: string;
+};
 
 function AdminStudentView() {
     const [students, setStudents] = useState<Student[]>([]);
+    const [schools, setSchools] = useState<Record<string, string>>({});
     const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
     const [loading, setLoading] = useState(true);
     const [detailsLoading, setDetailsLoading] = useState(false);
     const [error, setError] = useState("");
-    const baseuri = API_BASE_URL;
-
-    const accessToken = localStorage.getItem("access_token");
-
-    const authHeaders = {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-    };
 
     const fetchStudents = async () => {
-        if (!accessToken) {
-            setError("No access token found. Please log in again.");
-            setLoading(false);
-            return;
-        }
-
         try {
-            const response = await fetch(baseuri + "student", {
-                method: "GET",
-                headers: authHeaders,
-            });
-
-            if (!response.ok) {
-                throw new Error(`Failed to fetch students. Status: ${response.status}`);
-            }
-
-            const data = await response.json();
+            const data = await apiRequest<Student[]>('student');
             setStudents(data);
         } catch (err) {
             console.error(err);
@@ -56,22 +38,29 @@ function AdminStudentView() {
             setLoading(false);
         }
     };
+    const fetchSchools = async () => {
+        try {
+            const data: School[] = await apiRequest<School[]>('drivingschool');
+
+            const schoolMap: Record<string, string> = {};
+            data.forEach((school) => {
+                schoolMap[school.id] = school.name;
+            });
+
+            setSchools(schoolMap);
+        } catch (err) {
+            console.error(err);
+            setError("Could not load schools.");
+        }
+    };
 
     const fetchStudentById = async (id: string) => {
         setDetailsLoading(true);
         setError("");
 
         try {
-            const response = await fetch(baseuri + `student/${id}`, {
-                method: "GET",
-                headers: authHeaders,
-            });
 
-            if (!response.ok) {
-                throw new Error(`Failed to fetch student. Status: ${response.status}`);
-            }
-
-            const data = await response.json();
+            const data = await apiRequest<Student>(`student/${id}`);
             setSelectedStudent(data);
         } catch (err) {
             console.error(err);
@@ -83,17 +72,7 @@ function AdminStudentView() {
 
     const deleteStudent = async (id: string) => {
         try {
-            const response = await fetch(
-                baseuri + `student/${id}`,
-                {
-                    method: "DELETE",
-                    headers: authHeaders,
-                }
-            );
-
-            if (!response.ok) {
-                throw new Error(`Failed to delete student. Status: ${response.status}`);
-            }
+            await apiRequest<void>(`student/${id}`, "DELETE");
 
             setSelectedStudent(null);
             setStudents((prev) => prev.filter((student) => student.id !== id));
@@ -105,6 +84,7 @@ function AdminStudentView() {
 
     useEffect(() => {
         fetchStudents();
+        fetchSchools();
     }, []);
 
     if (loading) {
@@ -121,30 +101,29 @@ function AdminStudentView() {
                 <>
                     <div className="StudentHeader">
                         <span>ID</span>
-                        <span>Name</span>
                         <span>Email</span>
-                        <span>Phone</span>
+                        <span>Køreskole</span>
+                        <span>Telefon nummer</span>
                     </div>
 
                     {students.map((student) => (
                         <button
-                            className="DrivingHistory studentRowButton"
+                            className="StudentRow studentRowButton"
                             key={student.id}
                             onClick={() => fetchStudentById(student.id)}
                             type="button"
                         >
                             <span>{student.id}</span>
-                            <span>
-                                {student.studentName?.firstName} {student.studentName?.lastName}
-                            </span>
                             <span>{student.emailAddress}</span>
+                            <span>{schools[student.schoolId ?? ""] ?? "Unknown school"}</span>
+
                             <span>{student.phoneNumber}</span>
                         </button>
                     ))}
                 </>
             )}
 
-            {detailsLoading && <p>Loading student details...</p>}
+            {detailsLoading && <p>Loading instructor details...</p>}
 
             {selectedStudent && !detailsLoading && (
                 <div className="StudentDetails">
@@ -153,12 +132,14 @@ function AdminStudentView() {
                         onClick={() => setSelectedStudent(null)}
                         type="button"
                     >
-                        Back to students
+                        Back to student overview
                     </button>
 
                     <h3>
+                        <strong>
                         {selectedStudent.studentName?.firstName}{" "}
                         {selectedStudent.studentName?.lastName}
+                        </strong>
                     </h3>
 
                     <p><strong>ID:</strong> {selectedStudent.id}</p>
@@ -166,9 +147,6 @@ function AdminStudentView() {
                     <p><strong>Email:</strong> {selectedStudent.emailAddress}</p>
                     <p><strong>Phone:</strong> {selectedStudent.phoneNumber}</p>
 
-                    <pre>
-                        {JSON.stringify(selectedStudent, null, 2)}
-                    </pre>
 
                     <button
                         className="deleteButton"

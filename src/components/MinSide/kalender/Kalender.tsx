@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './Kalender.css';
-import appointments  from "../../Functions/Appointments";
+import appointments, {useAppointments} from "../../Functions/Appointments";
 
 type KalenderProps = {
     selectedDate: Date | null;
@@ -9,9 +9,9 @@ type KalenderProps = {
 
 const Kalender: React.FC<KalenderProps> = ({ selectedDate, onSelectDate }) => {
     const [currentDate, setCurrentDate] = useState(new Date());
-
+    const { history, loading, error } = useAppointments();
     //const appointments = appointments;
-    const orderedAppointments = appointments.sort((a, b) => a.time.localeCompare(b.time));
+    const orderedAppointments = history.sort((a, b) => a.route.dateTimeRange.startDateTime.getTime()-(b.route.dateTimeRange.startDateTime.getTime()));
 
     const getDaysInMonth = (date: Date) => {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -42,20 +42,20 @@ const Kalender: React.FC<KalenderProps> = ({ selectedDate, onSelectDate }) => {
     const hasActiveAppointment = (day: number) => {
     return orderedAppointments.some(
         (apt) =>
-            apt.isactive &&
-            apt.date.getDate() === day &&
-            apt.date.getMonth() === currentDate.getMonth() &&
-            apt.date.getFullYear() === currentDate.getFullYear()
+            apt.route.dateTimeRange.startDateTime >= new Date() &&
+            apt.route.dateTimeRange.startDateTime.getDate() === day &&
+            apt.route.dateTimeRange.startDateTime.getDate() === currentDate.getMonth() &&
+            apt.route.dateTimeRange.startDateTime.getDate() === currentDate.getFullYear()
     );
     };
 
     const hasInactiveAppointment = (day: number) => {
         return orderedAppointments.some(
             (apt) =>
-                !apt.isactive &&
-                apt.date.getDate() === day &&
-                apt.date.getMonth() === currentDate.getMonth() &&
-                apt.date.getFullYear() === currentDate.getFullYear()
+                apt.route.dateTimeRange.startDateTime < new Date() &&
+                apt.route.dateTimeRange.startDateTime.getDate() === day &&
+                apt.route.dateTimeRange.startDateTime.getMonth() === currentDate.getMonth() &&
+                apt.route.dateTimeRange.startDateTime.getFullYear() === currentDate.getFullYear()
                 //apt.date.getDate() >= new Date().getDate() &&
                 //apt.date.getMonth() >= new Date().getMonth() &&
                 //apt.date.getFullYear() >= new Date().getFullYear()
@@ -131,14 +131,14 @@ const Kalender: React.FC<KalenderProps> = ({ selectedDate, onSelectDate }) => {
                                 {orderedAppointments
                                     .filter(
                                         (apt) =>
-                                            apt.date.getDate() === day &&
-                                            apt.date.getMonth() === currentDate.getMonth() &&
-                                            apt.date.getFullYear() === currentDate.getFullYear()
+                                            apt.route.dateTimeRange.startDateTime.getDate() === day &&
+                                            apt.route.dateTimeRange.startDateTime.getMonth() === currentDate.getMonth() &&
+                                            apt.route.dateTimeRange.startDateTime.getFullYear() === currentDate.getFullYear()
                                     )
                                     .slice(0, 5)
                                     .map((apt) => (
                                         <div key={apt.id} className="appointment-preview">
-                                            {apt.time}
+                                            { apt.route.dateTimeRange.startDateTime.getTime()}
                                         </div>
                                     ))}
                             </div>

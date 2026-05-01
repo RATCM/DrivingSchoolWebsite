@@ -1,20 +1,20 @@
 class StreetsAddressModel {
-    address: string;
-    postalCode: string;
-    city: string;
-    region: string;
+    AddressLine: string;
+    PostalCode: string;
+    City: string;
+    Region: string;
 
 
     constructor(
-        address: string,
+        addressLine: string,
         postalCode: string,
         city: string,
         region: string,
     ) {
-        this.address = address;
-        this.postalCode = postalCode;
-        this.city = city;
-        this.region = region;
+        this.AddressLine = addressLine;
+        this.PostalCode = postalCode;
+        this.City = city;
+        this.Region = region;
     }
 }
 export default StreetsAddressModel;

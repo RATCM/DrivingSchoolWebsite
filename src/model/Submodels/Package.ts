@@ -1,9 +1,9 @@
 import pricing from "./Pricing";
 
 class Package {
-    title: string;
-    description: string;
-    price: pricing
+    Title: string;
+    Description: string;
+    Price: pricing
 
 
 
@@ -12,9 +12,9 @@ class Package {
         description: string,
         price: pricing,
     ) {
-        this.title = title;
-        this.description = description;
-        this.price = price;
+        this.Title = title;
+        this.Description = description;
+        this.Price = price;
     }
 }
 export default Package;

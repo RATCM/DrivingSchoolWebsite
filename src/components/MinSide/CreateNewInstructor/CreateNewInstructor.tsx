@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./CreateNewInstructor.css";
-import { API_BASE_URL } from "../../../Api/config";
+import {apiRequest} from "../../../Api/apiRequest";
 
 type DrivingSchool = {
     id: string;
@@ -19,26 +19,11 @@ function CreateNewInstructor() {
 
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
-    const baseuri = API_BASE_URL;
 
     useEffect(() => {
         const fetchDrivingSchools = async () => {
             try {
-                const token = localStorage.getItem("access_token");
-
-
-                const response = await fetch(baseuri + "drivingschool", {
-                    method: "GET",
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error("Could not fetch driving schools");
-                }
-
-                const data = await response.json();
+                const data = await apiRequest<DrivingSchool[]>('drivingschool');
                 setDrivingSchools(data);
             } catch (err) {
                 setError("Failed to load driving schools.");
@@ -54,8 +39,6 @@ function CreateNewInstructor() {
         setError("");
 
         try {
-            const token = localStorage.getItem("access_token");
-
             const body = {
                 schoolId: schoolId,
                 name: {
@@ -66,19 +49,7 @@ function CreateNewInstructor() {
                 phoneNumber: phoneNumber,
                 password: password
             };
-
-            const response = await fetch(baseuri + "instructor/create", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify(body)
-            });
-
-            if (!response.ok) {
-                throw new Error("Could not create instructor");
-            }
+            await apiRequest<void>('instructor/register', 'POST', body);
 
             setMessage("Instructor created successfully.");
 

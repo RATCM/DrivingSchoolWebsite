@@ -1,35 +1,33 @@
-import LessonModel from "./LessonModel";
-import InstructorModel from "./InstructorModel";
-import drivingSchoolModel from "./DrivingSchoolModel";
-import StudentModel from "./StudentModel";
+import PricingGetDTO from "../DTO/PricingGetDTO";
+import DrivingObjectiveModel from "./Submodels/DrivingLesson/DrivingObjectiveModel";
+import DrivingRouteModel from "./Submodels/DrivingLesson/DrivingRouteModel";
 
-class DrivingLessonModel extends LessonModel{
-    student: StudentModel;
-    studentSignature: string;
-    startTime: string;
-    endTime: string;
-    route: number[];
+class DrivingLessonModel {
+    id: string;
+    schoolId: string;
+    instructorId: string;
+    studentId: string;
+    route: DrivingRouteModel;
+    price: PricingGetDTO;
+    completedObjectives: DrivingObjectiveModel;
 
     constructor(
-        instructor : InstructorModel,
-        instructorSignature: string,
-        drivingSchool : drivingSchoolModel,
-        price: number,
-        student: StudentModel,
-        studentSignature : string,
-        startTime : string,
-        endTime : string,
-        route : number[]
+        id: string,
+        schoolId: string,
+        instructorId: string,
+        studentId: string,
+        route: DrivingRouteModel,
+        price: PricingGetDTO,
+        completedObjectives: DrivingObjectiveModel
     ) {
-        super(instructor,
-            instructorSignature,
-            drivingSchool,
-            price);
-        this.student = student;
-        this.studentSignature = studentSignature;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.id = id;
+        this.schoolId = schoolId;
+        this.instructorId = instructorId;
+        this.studentId = studentId;
         this.route = route;
+        this.price = price;
+        this.completedObjectives = completedObjectives;
     }
 }
+
 export default DrivingLessonModel;

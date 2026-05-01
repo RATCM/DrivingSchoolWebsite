@@ -1,5 +1,7 @@
 import "./InstructorStudentView.css";
 import { useEffect, useState } from "react";
+import GetSelf from "../../Functions/GetSelf";
+import {apiRequest} from "../../../Api/apiRequest";
 
 type Student = {
     id: string;
@@ -14,35 +16,29 @@ type Student = {
     drivingLessons?: unknown;
 };
 
+type Instructor = {
+    id: string;
+    schoolId: string;
+    instructorName?: {
+        firstName?: string;
+        lastName?: string;
+    };
+    emailAddress?: string;
+    phoneNumber?: string;
+    [key: string]: unknown;
+}
 function InstructorStudentView() {
     const [students, setStudents] = useState<Student[]>([]);
+    const [myDrivingSchool, setMyDrivingSchool] = useState<string>("");
     const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
     const [loading, setLoading] = useState(true);
     const [detailsLoading, setDetailsLoading] = useState(false);
     const [error, setError] = useState("");
-    const myId = localStorage.getItem("myId");
-    const accessToken = localStorage.getItem("access_token");
-
-    const authHeaders = {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-    };
+    const { id: myId, error: selfError } = GetSelf();
     const fetchDrivingSchool = async () => {
-        if (!accessToken) {
-            setError("No access token found. Please log in again.");
-            setLoading(false);
-            return;
-        }
-        try {
-            const response = await fetch(`http://localhost:5259/instructor/${myId}`, {
-                method: "GET",
-                headers: authHeaders,
-            });
-            if (!response.ok) {
-                throw new Error(`Failed to fetch drivingschool. Status: ${response.status}`);
-            }
-            const data = await response.json();
-            return data.drivingSchoolId;
+       try {
+            const data = await apiRequest<Instructor>(`instructor/${myId}`);
+            setMyDrivingSchool(data.schoolId);
         }
         catch (err) {
             console.error(err);
@@ -50,28 +46,14 @@ function InstructorStudentView() {
         }
     }
     const fetchStudents = async () => {
-        if (!accessToken) {
-            setError("No access token found. Please log in again.");
-            setLoading(false);
-            return;
-        }
-        const myDrivingSchool = await fetchDrivingSchool();
-
         try {
-            const response = await fetch(`http://localhost:5259/drivingschool/${myDrivingSchool}/student`, {
-                method: "GET",
-                headers: authHeaders,
-            });
 
-            if (!response.ok) {
-                throw new Error(`Failed to fetch students. Status: ${response.status}`);
-            }
+            const data = await apiRequest<Student[]>(`drivingschool/${myDrivingSchool}/student`);
 
-            const data = await response.json();
             setStudents(data);
         } catch (err) {
             console.error(err);
-            setError("Could not load students.");
+            setError("Could not load students."+ myId);
         } finally {
             setLoading(false);
         }
@@ -80,18 +62,8 @@ function InstructorStudentView() {
     const fetchStudentById = async (id: string) => {
         setDetailsLoading(true);
         setError("");
-
         try {
-            const response = await fetch(`http://localhost:5259/student/${id}`, {
-                method: "GET",
-                headers: authHeaders,
-            });
-
-            if (!response.ok) {
-                throw new Error(`Failed to fetch student. Status: ${response.status}`);
-            }
-
-            const data = await response.json();
+            const data = await apiRequest<Student>(`student/${id}`);
             setSelectedStudent(data);
         } catch (err) {
             console.error(err);
@@ -103,17 +75,7 @@ function InstructorStudentView() {
 
     const deleteStudent = async (id: string) => {
         try {
-            const response = await fetch(
-                `http://localhost:5259/student/${id}`,
-                {
-                    method: "DELETE",
-                    headers: authHeaders,
-                }
-            );
-
-            if (!response.ok) {
-                throw new Error(`Failed to delete student. Status: ${response.status}`);
-            }
+            await apiRequest<void>(`student/${id}`, "DELETE")
 
             setSelectedStudent(null);
             setStudents((prev) => prev.filter((student) => student.id !== id));
@@ -124,8 +86,22 @@ function InstructorStudentView() {
     };
 
     useEffect(() => {
+        if (selfError) {
+            setError(selfError);
+            setLoading(false);
+            return;
+        }
+
+        if (!myId) {
+            return;
+
+        }
+        fetchDrivingSchool();
+        if (!myDrivingSchool) {
+            return;
+        }
         fetchStudents();
-    }, []);
+    }, [myDrivingSchool, myId, selfError]);
 
     if (loading) {
         return <p>Loading students...</p>;
@@ -139,7 +115,7 @@ function InstructorStudentView() {
 
             {!selectedStudent && (
                 <>
-                    <div className="StudentHeader">
+                    <div className="studentHeader">
                         <span>ID</span>
                         <span>Name</span>
                         <span>Email</span>
@@ -153,7 +129,7 @@ function InstructorStudentView() {
                             onClick={() => fetchStudentById(student.id)}
                             type="button"
                         >
-                            <span>{student.id}</span>
+                            <span>{student.id.replaceAll("-", "-\u200B")}</span>
                             <span>
                                 {student.studentName?.firstName} {student.studentName?.lastName}
                             </span>
@@ -177,8 +153,8 @@ function InstructorStudentView() {
                     </button>
 
                     <h3>
-                        {selectedStudent.studentName?.firstName}{" "}
-                        {selectedStudent.studentName?.lastName}
+                        <strong>{selectedStudent.studentName?.firstName}{" "}
+                        {selectedStudent.studentName?.lastName}</strong>
                     </h3>
 
                     <p><strong>ID:</strong> {selectedStudent.id}</p>
@@ -186,9 +162,7 @@ function InstructorStudentView() {
                     <p><strong>Email:</strong> {selectedStudent.emailAddress}</p>
                     <p><strong>Phone:</strong> {selectedStudent.phoneNumber}</p>
 
-                    <pre>
-                        {JSON.stringify(selectedStudent, null, 2)}
-                    </pre>
+
 
                     <button
                         className="deleteButton"
