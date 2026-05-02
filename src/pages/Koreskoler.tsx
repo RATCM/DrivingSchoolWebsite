@@ -3,7 +3,7 @@ import "./Koreskoler.css";
 import SchoolResults from "../components/Koreskoler/SchoolResults/SchoolResults";
 import "../components/Functions/SchoolList"
 import DrivingSchoolViewModel, {mapDrivingSchoolViewModel} from "../viewmodel/DrivingSchoolViewModel";
-import {apiPublicRequest} from "../Api/apiRequest";
+import {apiRequest} from "../Api/apiRequest";
 import DrivingSchoolGetDTO from "../DTO/DrivingSchoolGetDTO";
 import GetDTOtoModel from "../Mappers/GetDTOtoModel";
 
@@ -15,14 +15,14 @@ function Koreskoler() {
 
     const getAllDrivingSchools = async () => {
         try {
-            const data = await apiPublicRequest<DrivingSchoolGetDTO[]>("drivingschool");
+            const data = await apiRequest<DrivingSchoolGetDTO[]>("drivingschool");
             const drivingSchoolArray = data.map((dto) => GetDTOtoModel(dto));
             const viewModelArray = drivingSchoolArray.map(e => {return mapDrivingSchoolViewModel(e)})
             setDrivingSchoolViewModels(viewModelArray);
             setTest("Søg")
         } catch (err) {
             console.error(err);
-            setError("Fejl ved indlæsning af køreskoler ");
+            setError("Fejl ved indlæsning af køreskoler " + err);
         }
     }
 
@@ -48,7 +48,7 @@ function Koreskoler() {
 
 
     //This block reads values of sliders in filter box and displays their current value when hovered over
-    const [currentPrice, setCurrentPrice] = React.useState("20000");
+    const [currentPrice, setCurrentPrice] = React.useState("30000");
     const priceSlider= document.querySelector("#package-section");
     const inputPrice= priceSlider?.querySelector("input");
     function updateCurrentPrice() {
@@ -131,22 +131,23 @@ function Koreskoler() {
 
                     <div id ="package-section">
                         <b>Maks. pakkepris:</b>
-                        <input id={"price"} type={"range"} min={5000} max={20000} step={100} name={"20000"} list={"prices"} title={currentPrice} defaultValue={20000} onChange={updateCurrentPrice}/>
+                        <input id={"price"} type={"range"} min={0} max={30000} step={100} name={"20000"} list={"prices"} title={currentPrice} defaultValue={30000} onChange={updateCurrentPrice}/>
                         <datalist id={"prices"}>
-                            <option value="5000" label="5000"></option>
-                            <option value="7500"></option>
+                            <option value="0" label="0"></option>
+                            <option value="5000"></option>
                             <option value="10000" label="10000"></option>
-                            <option value="12500"></option>
-                            <option value="15000" label="15000"></option>
-                            <option value="17500"></option>
+                            <option value="15000"></option>
                             <option value="20000" label="20000"></option>
+                            <option value="25000"></option>
+                            <option value="30000" label="30000"></option>
                         </datalist>
                     </div>
 
                     <div id="avg-section">
                         <b>Maks. gennemsnitlig forløbspris:</b>
-                        <input id={"avg-price"} type={"range"} min={5000} max={30000} step={100} name={"30000"} list={"avg-prices"} title={currentAvgPrice} defaultValue={30000} onChange={updateCurrentAvgPrice}/>
+                        <input id={"avg-price"} type={"range"} min={0} max={30000} step={100} name={"30000"} list={"avg-prices"} title={currentAvgPrice} defaultValue={30000} onChange={updateCurrentAvgPrice}/>
                         <datalist id={"avg-prices"}>
+                            <option value="0" label="0"></option>
                             <option value="5000"></option>
                             <option value="10000" label="10000"></option>
                             <option value="15000"></option>
