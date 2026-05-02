@@ -2,11 +2,35 @@ import React from "react";
 import "./Koreskoler.css";
 import SchoolResults from "../components/Koreskoler/SchoolResults/SchoolResults";
 import "../components/Functions/SchoolList"
-import DrivingSchoolViewModel from "../viewmodel/DrivingSchoolViewModel";
-import schoolViewModels from "../components/Functions/SchoolList";
+import DrivingSchoolViewModel, {mapDrivingSchoolViewModel} from "../viewmodel/DrivingSchoolViewModel";
+import {apiPublicRequest} from "../Api/apiRequest";
+import DrivingSchoolGetDTO from "../DTO/DrivingSchoolGetDTO";
+import GetDTOtoModel from "../Mappers/GetDTOtoModel";
 
 
 function Koreskoler() {
+    const [drivingSchoolViewModels, setDrivingSchoolViewModels] = React.useState<DrivingSchoolViewModel[]>([]);
+    const [test, setTest] = React.useState("Ups");
+    const [error, setError] = React.useState("");
+
+    const getAllDrivingSchools = async () => {
+        try {
+            const data = await apiPublicRequest<DrivingSchoolGetDTO[]>("drivingschool");
+            const drivingSchoolArray = data.map((dto) => GetDTOtoModel(dto));
+            const viewModelArray = drivingSchoolArray.map(e => {return mapDrivingSchoolViewModel(e)})
+            setDrivingSchoolViewModels(viewModelArray);
+            setTest("Søg")
+        } catch (err) {
+            console.error(err);
+            setError("Fejl ved indlæsning af køreskoler");
+        }
+    }
+
+    React.useEffect(() => {
+            getAllDrivingSchools();
+        }, []
+    )
+
 
     //This block handles the search box content
     const [active, setActive] = React.useState(false);
@@ -40,7 +64,7 @@ function Koreskoler() {
         try {setCurrentAvgPrice(inputAvgPrice!.value);}
         catch (e) {setCurrentAvgPrice("");}
     }
-    const [currentPassRate, setCurrentPassRate] = React.useState("50");
+    const [currentPassRate, setCurrentPassRate] = React.useState("0");
     const passRateSlider= document.querySelector("#pass-rate-section");
     const inputPassRate= passRateSlider?.querySelector("input");
     function updateCurrentPassRate() {
@@ -50,7 +74,7 @@ function Koreskoler() {
 
     //filtering and sorting
     function filterList(): DrivingSchoolViewModel[] {
-        return schoolViewModels.filter(a => Number(a.pricing)<Number(currentPrice))
+        return drivingSchoolViewModels.filter(a => Number(a.pricing)<Number(currentPrice))
     }
     const [sortOption, setSortOption] = React.useState("alphabetical");
     const sortDropDown= document.querySelector("#sort-results");
@@ -147,13 +171,13 @@ function Koreskoler() {
 
                     <div id ="pass-rate-section">
                         <b>Mindste gennemførselsprocent:</b>
-                        <input id={"pass-rate"} type={"range"} min={50} max={100} step={1} list={"pass-rates"} title={currentPassRate} defaultValue={50} onChange={updateCurrentPassRate}/>
+                        <input id={"pass-rate"} type={"range"} min={0} max={100} step={1} list={"pass-rates"} title={currentPassRate} defaultValue={0} onChange={updateCurrentPassRate}/>
                         <datalist id={"pass-rates"}>
-                            <option value="50" label="50"></option>
+                            <option value="0" label="0"></option>
+                            <option value="20" label="20"></option>
+                            <option value="40" label="40"></option>
                             <option value="60" label="60"></option>
-                            <option value="70" label="70"></option>
                             <option value="80" label="80"></option>
-                            <option value="90" label="90"></option>
                             <option value="100" label="100"></option>
                         </datalist>
                     </div>
@@ -207,7 +231,7 @@ function Koreskoler() {
                             onKeyUp={e => onEnter(e)}
                         />
                         <button className="search-button" onClick={() => updateSearchTerm()}>
-                            Søg
+                            {test}
                         </button>
                     </div>
                 </div>
@@ -234,7 +258,7 @@ function Koreskoler() {
                     }
                 </div>
                 <div className={"school-results"}>
-                    {active && resultBox}
+                    {active && error && resultBox}
                 </div>
 
             </div>

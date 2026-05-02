@@ -15,7 +15,7 @@ function SchoolResults(searchTerm: string|null, schoolViewModels: drivingSchoolV
                     <p>Adresse: {vm.address}</p>
                     <p>Tlf: {vm.phone}</p>
                     <p>Hjemmeside: {vm.website}</p>
-                    <p>Pakkepris: {vm.pricing}</p>
+                    {/*<p>Pakkepris: {vm.pricing}</p>*/}
                 </div>
             )));
 }
