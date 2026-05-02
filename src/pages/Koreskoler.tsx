@@ -22,7 +22,7 @@ function Koreskoler() {
             setTest("Søg")
         } catch (err) {
             console.error(err);
-            setError("Fejl ved indlæsning af køreskoler");
+            setError("Fejl ved indlæsning af køreskoler ");
         }
     }
 
@@ -258,7 +258,8 @@ function Koreskoler() {
                     }
                 </div>
                 <div className={"school-results"}>
-                    {active && error && resultBox}
+                    {active && resultBox}
+                    {error && <p>{error}</p>}
                 </div>
 
             </div>
