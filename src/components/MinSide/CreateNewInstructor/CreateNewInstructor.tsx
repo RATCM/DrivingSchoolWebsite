@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./CreateNewInstructor.css";
 import {apiRequest} from "../../../Api/apiRequest";
+import useDrivingSchools from "../../Functions/fetchDrivingSchools";
 
 type DrivingSchool = {
     id: string;
@@ -19,6 +20,11 @@ function CreateNewInstructor() {
 
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
+    const {
+        drivingSchools: schools,
+        loading: schoolsLoading,
+        error: schoolsError
+    } = useDrivingSchools();
 
     useEffect(() => {
         const fetchDrivingSchools = async () => {

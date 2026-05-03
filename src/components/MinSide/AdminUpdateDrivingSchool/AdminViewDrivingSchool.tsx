@@ -4,6 +4,7 @@ import { apiRequest } from "../../../Api/apiRequest";
 import DrivingSchoolModel from "../../../model/DrivingSchoolModel";
 import DrivingSchoolGetDTO from "../../../DTO/DrivingSchoolGetDTO";
 import GetDTOtoModel from "../../../Mappers/GetDTOtoModel";
+import useDrivingSchools from "../../Functions/fetchDrivingSchools";
 
 function AdminViewDrivingSchool() {
     const [drivingSchools, setDrivingSchools] = useState<DrivingSchoolModel[]>([]);
@@ -12,6 +13,11 @@ function AdminViewDrivingSchool() {
     const [loading, setLoading] = useState(true);
     const [detailsLoading, setDetailsLoading] = useState(false);
     const [error, setError] = useState("");
+    const {
+        drivingSchools: schools,
+        loading: schoolsLoading,
+        error: schoolsError
+    } = useDrivingSchools();
 
     const fetchDrivingSchools = async () => {
         try {

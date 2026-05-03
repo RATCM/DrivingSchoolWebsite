@@ -68,3 +68,44 @@
     padding: 1.11vh 1.55vh;
     cursor: pointer;
 }
+
+.updateButton {
+    background: #1f6feb;
+    color: white;
+    border: none;
+    border-radius: 1.333vh;
+    padding: 1.33vh 2vh;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.updateButton:hover {
+    background: #1f6feb;
+}
+
+.studentEditForm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.studentEditForm label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.studentEditForm input,
+.studentEditForm select {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+.studentEditForm input:disabled {
+    background-color: #e7e7e7;
+    cursor: not-allowed;
+}
