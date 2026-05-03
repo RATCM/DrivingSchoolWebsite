@@ -174,7 +174,7 @@ function Koreskoler() {
                     </div>
 
                     <div id ="pass-rate-section">
-                        <b>Mindste gennemførselsprocent:</b>
+                        <b>Min. gennemførselsprocent:</b>
                         <input id={"pass-rate"} type={"range"} min={0} max={100} step={1} list={"pass-rates"} title={currentPassRate} defaultValue={0} onChange={updateCurrentPassRate}/>
                         <datalist id={"pass-rates"}>
                             <option value="0" label="0"></option>
