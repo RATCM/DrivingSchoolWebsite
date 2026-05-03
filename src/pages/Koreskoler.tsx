@@ -1,34 +1,48 @@
 import React from "react";
 import "./Koreskoler.css";
 import SchoolResults from "../components/Koreskoler/SchoolResults/SchoolResults";
-import "../components/Functions/SchoolList"
 import DrivingSchoolViewModel, {mapDrivingSchoolViewModel} from "../viewmodel/DrivingSchoolViewModel";
 import {apiRequest} from "../Api/apiRequest";
 import DrivingSchoolGetDTO from "../DTO/DrivingSchoolGetDTO";
+import RatingGetDTO from "../DTO/RatingGetDTO";
 import GetDTOtoModel from "../Mappers/GetDTOtoModel";
+import DrivingSchoolModel from "../model/DrivingSchoolModel";
 
 
 function Koreskoler() {
     const [drivingSchoolViewModels, setDrivingSchoolViewModels] = React.useState<DrivingSchoolViewModel[]>([]);
-    const [test, setTest] = React.useState("Ups");
     const [error, setError] = React.useState("");
 
     const getAllDrivingSchools = async () => {
         try {
             const data = await apiRequest<DrivingSchoolGetDTO[]>("drivingschool");
             const drivingSchoolArray = data.map((dto) => GetDTOtoModel(dto));
-            const viewModelArray = drivingSchoolArray.map(e => {return mapDrivingSchoolViewModel(e)})
+            let viewModelArray: DrivingSchoolViewModel[] = [];
+            for (let i = 0; i < drivingSchoolArray.length; i++) {
+                const result = await getDrivingSchoolRatings(drivingSchoolArray[i])
+                viewModelArray.push(mapDrivingSchoolViewModel(drivingSchoolArray[i],`${result[0].toFixed(2)}` ,`${result[1].toFixed(2)}`))
+            }
             setDrivingSchoolViewModels(viewModelArray);
-            setTest("Søg")
         } catch (err) {
             console.error(err);
-            setError("Fejl ved indlæsning af køreskoler " + err);
+            setError("Fejl ved indlæsning af køreskoler ");
+        }
+    }
+
+    const getDrivingSchoolRatings = async (model: DrivingSchoolModel): Promise<number[]> => {
+        try {
+            const data = await apiRequest<RatingGetDTO>(`drivingschool/${model.id}/rating`);
+            return [data.passRate*100,data.averagePrice.amount]
+        } catch (err) {
+            console.error(err);
+            setError("Fejl ved indlæsning af køreskoler ");
+            return [0,10];
         }
     }
 
     React.useEffect(() => {
             getAllDrivingSchools();
-        }, []
+        }
     )
 
 
@@ -75,6 +89,8 @@ function Koreskoler() {
     //filtering and sorting
     function filterList(): DrivingSchoolViewModel[] {
         return drivingSchoolViewModels.filter(a => Number(a.pricing)<Number(currentPrice))
+            .filter(a => Number(a.avgPrice)<Number(currentAvgPrice))
+            .filter(a => Number(a.passRate)>Number(currentPassRate))
     }
     const [sortOption, setSortOption] = React.useState("alphabetical");
     const sortDropDown= document.querySelector("#sort-results");
@@ -105,9 +121,9 @@ function Koreskoler() {
             })
             case "package-ascending": return list.sort((a,b) => Number(a.pricing) - Number(b.pricing))
             case "package-descending": return list.sort((a,b) => Number(b.pricing) - Number(a.pricing))
-            case "avg-ascending": return list.sort((a,b) => Number(a.pricing) - Number(b.pricing))
-            case "avg-descending": return list.sort((a,b) => Number(b.pricing) - Number(a.pricing))
-            case "pass-rate-descending": return list.sort((a,b) => Number(b.pricing) - Number(a.pricing))
+            case "avg-ascending": return list.sort((a,b) => Number(a.avgPrice) - Number(b.avgPrice))
+            case "avg-descending": return list.sort((a,b) => Number(b.avgPrice) - Number(a.avgPrice))
+            case "pass-rate-descending": return list.sort((a,b) => Number(b.passRate) - Number(a.passRate))
             default: return list;
         }
 
@@ -157,19 +173,6 @@ function Koreskoler() {
                         </datalist>
                     </div>
 
-                    {/*<div id ="rating-section">*/}
-                    {/*    <b>Antal stjerner:</b>*/}
-                    {/*    <input id={"rating"} type={"range"} min={0} max={5} step={1} list={"ratings"}/>*/}
-                    {/*    <datalist id={"ratings"}>*/}
-                    {/*        <option value="0" label="0"></option>*/}
-                    {/*        <option value="1" label="1"></option>*/}
-                    {/*        <option value="2" label="2"></option>*/}
-                    {/*        <option value="3" label="3"></option>*/}
-                    {/*        <option value="4" label="4"></option>*/}
-                    {/*        <option value="5" label="5"></option>*/}
-                    {/*    </datalist>*/}
-                    {/*</div>*/}
-
                     <div id ="pass-rate-section">
                         <b>Mindste gennemførselsprocent:</b>
                         <input id={"pass-rate"} type={"range"} min={0} max={100} step={1} list={"pass-rates"} title={currentPassRate} defaultValue={0} onChange={updateCurrentPassRate}/>
@@ -183,24 +186,6 @@ function Koreskoler() {
                         </datalist>
                     </div>
 
-                    {/*<div className="filterchecklist">*/}
-                    {/*    Klassifikation:*/}
-                    {/*    <label><span>AM</span><input type="checkbox"/></label>*/}
-                    {/*    <label><span>A1</span><input type="checkbox"/></label>*/}
-                    {/*    <label><span>A2</span><input type="checkbox"/></label>*/}
-                    {/*    <label><span>A</span><input type="checkbox"/></label>*/}
-                    {/*    <label><span>B1</span><input type="checkbox"/></label>*/}
-                    {/*    <label><span>B (bil)</span><input type="checkbox"/></label>*/}
-                    {/*    <label><span>C1</span><input type="checkbox"/></label>*/}
-                    {/*    <label><span>C</span><input type="checkbox"/></label>*/}
-                    {/*    <label><span>D1</span><input type="checkbox"/></label>*/}
-                    {/*    <label><span>D</span><input type="checkbox"/></label>*/}
-                    {/*    <label><span>BE</span><input type="checkbox"/></label>*/}
-                    {/*    <label><span>C1E</span><input type="checkbox"/></label>*/}
-                    {/*    <label><span>CE</span><input type="checkbox"/></label>*/}
-                    {/*    <label><span>D1E</span><input type="checkbox"/></label>*/}
-                    {/*    <label><span>DE</span><input type="checkbox"/></label>*/}
-                    {/*</div>*/}
                     <div className="filterchecklist">
                         <b>Region:</b>
                         <label><span>Hovedstaden</span><input type="checkbox"/></label>
@@ -210,11 +195,6 @@ function Koreskoler() {
                         <label><span>Nordjylland</span><input type="checkbox"/></label>
                     </div>
 
-                    {/*<div>*/}
-                    {/*    <button className="filter-button">*/}
-                    {/*        Filtrér resultater*/}
-                    {/*    </button>*/}
-                    {/*</div>*/}
                 </div>
             </div>
 
@@ -232,7 +212,7 @@ function Koreskoler() {
                             onKeyUp={e => onEnter(e)}
                         />
                         <button className="search-button" onClick={() => updateSearchTerm()}>
-                            {test}
+                            Søg
                         </button>
                     </div>
                 </div>
@@ -249,9 +229,9 @@ function Koreskoler() {
                                     <option value="alphabetical-reverse">Alfabetisk Z-A</option>
                                     <option value="package-ascending">Laveste pakkepris</option>
                                     <option value="package-descending">Højeste pakkepris</option>
-                                    <option value="avg-ascending" disabled>Laveste gennemsnitspris</option>
-                                    <option value="avg-descending" disabled>Højeste gennemsnitspris</option>
-                                    <option value="pass-rate-descending" disabled>Højeste beståelsesprocent</option>
+                                    <option value="avg-ascending">Laveste gennemsnitspris</option>
+                                    <option value="avg-descending">Højeste gennemsnitspris</option>
+                                    <option value="pass-rate-descending">Højeste beståelsesprocent</option>
                                 </select>
                             </div>
                             {/*<button className="cancel-search" onClick={() => setActive(false)}>X</button>*/}

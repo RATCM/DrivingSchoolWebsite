@@ -1,5 +1,4 @@
 import DrivingSchoolModel from "../model/DrivingSchoolModel";
-import Package from "../model/Submodels/Package";
 
 
 type DrivingSchoolViewModel = {
@@ -14,7 +13,23 @@ type DrivingSchoolViewModel = {
     avgPrice: string;
 };
 
-export function mapDrivingSchoolViewModel(model: DrivingSchoolModel): DrivingSchoolViewModel {
+export function mapDrivingSchoolViewModel(model: DrivingSchoolModel, passRate?: string ,avgPrice?: string): DrivingSchoolViewModel {
+
+    const sortedPackages = model.Packages.sort((a,b) =>
+        a.Price.Amount - b.Price.Amount)
+    const cheapestPackage = sortedPackages.at(0);
+    function cheapestPackageString() {
+        if (cheapestPackage) {
+            return `${cheapestPackage.Title} -- ${cheapestPackage.Price.Amount.toFixed(2)}`;
+        }
+        return `Ingen pakker`;
+    }
+    function cheapestPackagePricing() {
+        if (cheapestPackage) {
+            return `${cheapestPackage.Price.Amount.toFixed(2)}`;
+        }
+        return `30000`;
+    }
 
     return {
         schoolName: `${model.Name}`,
@@ -22,10 +37,10 @@ export function mapDrivingSchoolViewModel(model: DrivingSchoolModel): DrivingSch
         website: `${model.WebAddress}`,
         address: `${model.StreetAddress.AddressLine}, ${model.StreetAddress.PostalCode} ${model.StreetAddress.City}`,
         region: `${model.StreetAddress.Region}`,
-        packages: ``,
-        pricing: `1000`,
-        passRate: `100`,
-        avgPrice: `1000`
+        packages: cheapestPackageString(),
+        pricing: cheapestPackagePricing(),
+        passRate: passRate ? passRate: `80`,
+        avgPrice: avgPrice ? avgPrice: `100`
     }
 }
 export default DrivingSchoolViewModel;
