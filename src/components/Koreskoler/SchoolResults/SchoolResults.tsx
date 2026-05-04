@@ -12,7 +12,7 @@ function SchoolResults(searchTerm: string|null, schoolViewModels: drivingSchoolV
         filteredList.map((vm, i) => (
                 <div className="koreskole" key={i}>
                     <p><b>{vm.schoolName}</b></p>
-                    <p><b>Adresse:</b> {vm.address}</p>
+                    <p><b>Adresse:</b> {vm.addressLine}, {vm.addressCity}</p>
                     <p><b>Tlf:</b> {vm.phone}</p>
                     <p><b>Hjemmeside:</b> {vm.website}</p>
                     <p><b>Billigste pakke:</b> {vm.packages} DKK</p>

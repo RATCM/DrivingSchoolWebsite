@@ -109,18 +109,27 @@ h1 {
     overflow: scroll;
 }
 
-
-.filterchecklist {
+.city-dropdown {
     display: flex;
     flex-direction: column;
     gap: 0.5vh;
 }
-
-.filterchecklist label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9vw;
+.city-dropdown select {
+    gap: 1.5vh;
+    width: 18vw;
 }
+
+/*.filterchecklist {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    gap: 0.5vh;*/
+/*}*/
+
+/*.filterchecklist label {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    font-size: 0.9vw;*/
+/*}*/
 
 datalist {
     display: flex;

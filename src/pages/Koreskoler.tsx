@@ -86,11 +86,27 @@ function Koreskoler() {
         catch (e) {setCurrentPassRate("");}
     }
 
+    const [currentCity, setCurrentCity] = React.useState("");
+    const cityDropDown = document.querySelector("#city-dropdown");
+    const inputCity = cityDropDown?.querySelector("select")
+    function updateCurrentCity() {
+        try {setCurrentCity(inputCity!.value);}
+        catch (e) {setCurrentCity("");}
+    }
+
+    /*generates selectable options in the dropdown that filters by city*/
+    function cityDropDownList() {
+        return drivingSchoolViewModels.map(e => {
+            return <option value={e.addressCity}>{e.addressCity}</option>
+        })
+    }
+
     //filtering and sorting
     function filterList(): DrivingSchoolViewModel[] {
         return drivingSchoolViewModels.filter(a => Number(a.pricing)<Number(currentPrice))
             .filter(a => Number(a.avgPrice)<Number(currentAvgPrice))
             .filter(a => Number(a.passRate)>Number(currentPassRate))
+            .filter(a => a.addressCity.toLowerCase().includes(currentCity.toLowerCase()));
     }
     const [sortOption, setSortOption] = React.useState("alphabetical");
     const sortDropDown= document.querySelector("#sort-results");
@@ -132,8 +148,14 @@ function Koreskoler() {
     const resultBox = SchoolResults(searchTerm, sortList(filterList()));
     const matchingResults = filterList().filter(a => a.schoolName.toLowerCase().includes(searchTerm.toLowerCase())).length;
     function pluralResults(): string {
-        if (matchingResults !== 1) {
-            return "er"
+        if (matchingResults !== 1 && currentCity === "") {
+            return  `es`
+        }
+        if (matchingResults !== 1 && currentCity !== "") {
+            return `es i ${currentCity}`
+        }
+        if (matchingResults === 1 && currentCity !== "") {
+            return ` i ${currentCity}`
         }
         return ""
     }
@@ -186,13 +208,15 @@ function Koreskoler() {
                         </datalist>
                     </div>
 
-                    <div className="filterchecklist">
-                        <b>Region:</b>
-                        <label><span>Hovedstaden</span><input type="checkbox"/></label>
-                        <label><span>Sjælland</span><input type="checkbox"/></label>
-                        <label><span>Syddanmark</span><input type="checkbox"/></label>
-                        <label><span>Midtjylland</span><input type="checkbox"/></label>
-                        <label><span>Nordjylland</span><input type="checkbox"/></label>
+                    <div className="city-dropdown" id="city-dropdown">
+                        <b>Lokation:</b>
+                        <label htmlFor="city-dropdown"> </label>
+                        <p>
+                        <select name="city" id="city-select" onChange={updateCurrentCity}>
+                            <option value={""}>--Vælg kommune--</option>
+                            {cityDropDownList()}
+                        </select>
+                        </p>
                     </div>
 
                 </div>
@@ -220,7 +244,7 @@ function Koreskoler() {
                     {active &&
                         <div className="result-header">
                             <div className="result-header-text">
-                                <strong>Din søgning gav {matchingResults} resultat{pluralResults()}:</strong>
+                                <strong>Din søgning gav {matchingResults} match{pluralResults()}:</strong>
                             </div>
                             <div className="sort-results" id={"sort-results"}>
                                 <label htmlFor="sort-dropdown">Sortér: </label>

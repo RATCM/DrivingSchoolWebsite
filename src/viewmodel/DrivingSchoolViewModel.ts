@@ -5,7 +5,8 @@ type DrivingSchoolViewModel = {
     schoolName: string;
     phone: string;
     website: string;
-    address: string;
+    addressLine: string;
+    addressCity: string;
     region: string;
     packages: string;
     pricing: string;
@@ -35,7 +36,8 @@ export function mapDrivingSchoolViewModel(model: DrivingSchoolModel, passRate?: 
         schoolName: `${model.Name}`,
         phone: `${model.PhoneNumber}`,
         website: `${model.WebAddress}`,
-        address: `${model.StreetAddress.AddressLine}, ${model.StreetAddress.PostalCode} ${model.StreetAddress.City}`,
+        addressLine: `${model.StreetAddress.AddressLine}`,
+        addressCity: `${model.StreetAddress.PostalCode} ${model.StreetAddress.City}`,
         region: `${model.StreetAddress.Region}`,
         packages: cheapestPackageString(),
         pricing: cheapestPackagePricing(),
