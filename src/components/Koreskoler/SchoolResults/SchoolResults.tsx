@@ -1,26 +1,25 @@
-import DrivingSchoolModel from "../../../model/DrivingSchoolModel";
-import StreetsAddressModel from "../../../model/Submodels/StreetsAddressModel";
-import Package from "../../../model/Submodels/Package";
-import Pricing from "../../../model/Submodels/Pricing";
-import {mapDrivingSchoolViewModel} from "../../../viewmodel/DrivingSchoolViewModel";
 import "./SchoolResults.css"
 import React from "react";
-import "../../Functions/SchoolList"
+import drivingSchoolViewModel from "../../../viewmodel/DrivingSchoolViewModel";
 
-function SchoolResultBox() {
-    const drivingSchool = new DrivingSchoolModel("0","Jens' bedste skole","12 34 56 78","jens@skole.dk", new StreetsAddressModel("Skolestrædet 3","2800","Lyngby","Hovedstaden"), [new Package("ab","ab",new Pricing(0,"DKK"))]);
-    const vm = mapDrivingSchoolViewModel(drivingSchool);
+function SchoolResults(searchTerm: string|null, schoolViewModels: drivingSchoolViewModel[]) {
 
-    // const filtreretliste = liste.filter(a => a.navn.includes("blahblah"))
+    const filterTerm = searchTerm || ""
+    const filteredList= schoolViewModels.filter(a => a.schoolName.toLowerCase().includes(filterTerm.toLowerCase()))
+
+
     return (
-        <div>
-
-        <p style={{marginTop:20}}><b>{vm.schoolName}</b></p>
-                <p>Adresse: {vm.address}</p>
-                <p>Tlf: {vm.phone}</p>
-                <p>Hjemmeside: {vm.website}</p>
-        </div>
-);
+        filteredList.map((vm, i) => (
+                <div className="koreskole" key={i}>
+                    <p><b>{vm.schoolName}</b></p>
+                    <p><b>Adresse:</b> {vm.addressLine}, {vm.addressCity}</p>
+                    <p><b>Tlf:</b> {vm.phone}</p>
+                    <p><b>Hjemmeside:</b> {vm.website}</p>
+                    <p><b>Billigste pakke:</b> {vm.packages} DKK</p>
+                    <p><b>Gennemsnitlig forløbspris:</b> {vm.avgPrice} DKK</p>
+                    <p><b>Beståelsesprocent:</b> {vm.passRate}%</p>
+                </div>
+            )));
 }
 
-export default SchoolResultBox;
+export default SchoolResults;
