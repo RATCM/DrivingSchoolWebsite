@@ -114,7 +114,7 @@ function InstructorInfoView() {
                     onClick={() => deleteStudent(editableInstructor.id)}
                     type="button"
                 >
-                    Slet studerende
+                    Slet Bruger
                 </button>
 
             </div>

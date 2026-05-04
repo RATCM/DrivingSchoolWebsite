@@ -104,8 +104,8 @@ function Koreskoler() {
     //filtering and sorting
     function filterList(): DrivingSchoolViewModel[] {
         return drivingSchoolViewModels.filter(a => Number(a.pricing)<Number(currentPrice))
-            .filter(a => Number(a.avgPrice)<Number(currentAvgPrice))
-            .filter(a => Number(a.passRate)>Number(currentPassRate))
+            .filter(a => Number(a.avgPrice)<=Number(currentAvgPrice))
+            .filter(a => Number(a.passRate)>=Number(currentPassRate))
             .filter(a => a.addressCity.toLowerCase().includes(currentCity.toLowerCase()));
     }
     const [sortOption, setSortOption] = React.useState("alphabetical");
