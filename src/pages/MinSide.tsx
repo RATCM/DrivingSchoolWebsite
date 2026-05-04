@@ -14,6 +14,8 @@ import CreateNewInstructor from "../components/MinSide/CreateNewInstructor/Creat
 import AdminCreateDrivingSchool from "../components/MinSide/AdminCreateDrivingSchool/AdminCreateDrivingSchool";
 import AdminViewDrivingSchool from "../components/MinSide/AdminUpdateDrivingSchool/AdminViewDrivingSchool";
 import InviteStudents from "../components/MinSide/InviteStudents/InviteStudents";
+import StudentInfoView from "../components/MinSide/StudentInfoView/StudentInfoView";
+import InstructorInfoView from "../components/MinSide/InstructorInfoView/InstructorInfoView";
 
 type Role = "student" | "instructor" | "admin";
 
@@ -133,7 +135,10 @@ function MinSide() {
 
                 {active === "settings" && (
                     <div className="contentCard">
-                        Indstillinger content...
+                        if role === "student"{
+                        <StudentInfoView/>
+                    } else if role === "instructor"{
+                        <InstructorInfoView/>}
                     </div>
                 )}
 
