@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./CreateNewInstructor.css";
 import {apiRequest} from "../../../Api/apiRequest";
-
-type DrivingSchool = {
-    id: string;
-    name: string;
-};
+import useDrivingSchools from "../../Functions/fetchDrivingSchools";
 
 function CreateNewInstructor() {
-    const [drivingSchools, setDrivingSchools] = useState<DrivingSchool[]>([]);
     const [schoolId, setSchoolId] = useState("");
 
     const [firstName, setFirstName] = useState("");
@@ -19,19 +14,11 @@ function CreateNewInstructor() {
 
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
-
-    useEffect(() => {
-        const fetchDrivingSchools = async () => {
-            try {
-                const data = await apiRequest<DrivingSchool[]>('drivingschool');
-                setDrivingSchools(data);
-            } catch (err) {
-                setError("Failed to load driving schools.");
-            }
-        };
-
-        fetchDrivingSchools();
-    }, []);
+    const {
+        drivingSchools: schools,
+        loading: schoolsLoading,
+        error: schoolsError
+    } = useDrivingSchools();
 
     const handleCreateInstructor = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -67,11 +54,11 @@ function CreateNewInstructor() {
     return (
         <div className="create-instructor-page">
             <div className="admin-form-card">
-                <h1>Create instructor</h1>
+                <h1>Registrer ny instruktør</h1>
 
                 <form onSubmit={handleCreateInstructor} className="admin-form">
                     <label>
-                        Driving school
+                        Køreskole
                         <select
                             value={schoolId}
                             onChange={(e) => setSchoolId(e.target.value)}
@@ -79,16 +66,16 @@ function CreateNewInstructor() {
                         >
                             <option value="">Select driving school</option>
 
-                            {drivingSchools.map((school) => (
+                            {schools.map((school) => (
                                 <option key={school.id} value={school.id}>
-                                    {school.name}
+                                    {school.Name}
                                 </option>
                             ))}
                         </select>
                     </label>
 
                     <label>
-                        First name
+                        Fornavn
                         <input
                             type="text"
                             value={firstName}
@@ -98,7 +85,7 @@ function CreateNewInstructor() {
                     </label>
 
                     <label>
-                        Last name
+                        Efternavn
                         <input
                             type="text"
                             value={lastName}
@@ -118,7 +105,7 @@ function CreateNewInstructor() {
                     </label>
 
                     <label>
-                        Phone number
+                        Telefonnummer
                         <input
                             type="text"
                             value={phoneNumber}
@@ -128,7 +115,7 @@ function CreateNewInstructor() {
                     </label>
 
                     <label>
-                        Password
+                        Kodeord
                         <input
                             type="password"
                             value={password}
@@ -140,7 +127,7 @@ function CreateNewInstructor() {
                     {message && <p className="success-message">{message}</p>}
                     {error && <p className="error-message">{error}</p>}
 
-                    <button type="submit">Create instructor</button>
+                    <button type="submit">Registrer instruktør</button>
                 </form>
             </div>
         </div>

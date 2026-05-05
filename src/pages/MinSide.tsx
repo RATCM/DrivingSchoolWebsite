@@ -14,6 +14,8 @@ import CreateNewInstructor from "../components/MinSide/CreateNewInstructor/Creat
 import AdminCreateDrivingSchool from "../components/MinSide/AdminCreateDrivingSchool/AdminCreateDrivingSchool";
 import AdminViewDrivingSchool from "../components/MinSide/AdminUpdateDrivingSchool/AdminViewDrivingSchool";
 import InviteStudents from "../components/MinSide/InviteStudents/InviteStudents";
+import StudentInfoView from "../components/MinSide/StudentInfoView/StudentInfoView";
+import InstructorInfoView from "../components/MinSide/InstructorInfoView/InstructorInfoView";
 
 type Role = "student" | "instructor" | "admin";
 
@@ -37,7 +39,8 @@ const allItems: NavigationItem[] = [
     { id: "CreateDrivingSchool", label: "Ny Køreskole"},
     { id: "ViewDrivingSchool", label: "Køreskoler"},
     { id: "instructorGenerateInvite", label: "Invitation af elever"},
-    { id: "settings", label: "Indstillinger" },
+    { id: "studentSettings", label: "Indstillinger" },
+    { id: "instructorSettings", label: "Indstillinger" },
 ];
 
 function MinSide() {
@@ -60,7 +63,8 @@ function MinSide() {
                     item.id !== "adminStudents" &&
                     item.id !== "CreateInstructor" &&
                     item.id !== "CreateDrivingSchool" &&
-                    item.id !== "ViewDrivingSchool"
+                    item.id !== "ViewDrivingSchool" &&
+                    item.id !== "studentSettings"
             );
         } else {
             return allItems.filter(
@@ -71,7 +75,8 @@ function MinSide() {
                     item.id !== "CreateInstructor" &&
                     item.id !== "CreateDrivingSchool" &&
                     item.id !== "ViewDrivingSchool" &&
-                    item.id !== "instructorGenerateInvite"
+                    item.id !== "instructorGenerateInvite" &&
+                    item.id !== "instructorSettings"
             );
         }
     }, [role]);
@@ -94,7 +99,9 @@ function MinSide() {
                     <div className="dashboardLayout">
                         <div className="middleColumn">
                             <MyDrivingSchoolBox />
-                            <MyProgressBox />
+                            {role === "student" &&
+                            <MyProgressBox />}
+
                         </div>
 
                         <div className="rightColumn">
@@ -131,9 +138,14 @@ function MinSide() {
                     </div>
                 )}
 
-                {active === "settings" && (
+                {active === "instructorSettings" && (
                     <div className="contentCard">
-                        Indstillinger content...
+                        <InstructorInfoView/>
+                    </div>
+                )}
+                {active === "studentSettings" && (
+                    <div className="contentCard">
+                        <StudentInfoView/>
                     </div>
                 )}
 

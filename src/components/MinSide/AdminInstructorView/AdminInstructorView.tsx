@@ -1,95 +1,67 @@
 import "./AdminInstructorView.css";
 import { useEffect, useState } from "react";
-import {apiRequest} from "../../../Api/apiRequest";
-
-type Instructor = {
-    id: string;
-    schoolId?: string;
-    name?: {
-        firstName?: string;
-        lastName?: string;
-    };
-    emailAddress?: string;
-    phoneNumber?: string;
-    [key: string]: unknown;
-};
-type School = {
-    id: string;
-    name: string;
-};
-
-
+import { apiRequest } from "../../../Api/apiRequest";
+import useDrivingSchools from "../../Functions/fetchDrivingSchools";
+import useInstructors from "../../Functions/useInstructor";
+import useInstructorById from "../../Functions/useInstructorbyId";
 
 function AdminInstructorView() {
-    const [instructors, setInstructors] = useState<Instructor[]>([]);
-    const [schools, setSchools] = useState<Record<string, string>>({});
-    const [selectedInstructor, setSelectedInstructor] = useState<Instructor | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [detailsLoading, setDetailsLoading] = useState(false);
-    const [error, setError] = useState("");
+    const [localError, setLocalError] = useState("");
+    const [localMessage, setLocalMessage] = useState("");
 
-    const fetchInstructors = async () => {
-        try {
+    const {
+        drivingSchools: schools,
+        loading: schoolsLoading,
+        error: schoolsError
+    } = useDrivingSchools();
 
-            const data = await apiRequest<Instructor[]>("instructor");
-            setInstructors(data);
-        } catch (err) {
-            console.error(err);
-            setError("Could not load instructors.");
-        } finally {
-            setLoading(false);
-        }
-    };
+    const {
+        Instructors,
+        loading: instructorsLoading,
+        error: instructorsError,
+        removeInstructor,
+    } = useInstructors();
 
-    const fetchInstructorById = async (id: string) => {
-        setDetailsLoading(true);
-        setError("");
+    const {
+        instructor: selectedInstructor,
+        loading: detailsLoading,
+        error: instructorDetailsError,
+        fetchInstructorById,
+        clearInstructor
+    } = useInstructorById();
 
-        try {
-
-
-            const data = await apiRequest<Instructor>(`instructor/${id}`);
-            setSelectedInstructor(data);
-        } catch (err) {
-            console.error(err);
-            setError("Could not load instructor details.");
-        } finally {
-            setDetailsLoading(false);
-        }
-    };
-    const fetchSchools = async () => {
-        try {
-            const data: School[] = await apiRequest<School[]>('drivingschool');
-
-            const schoolMap: Record<string, string> = {};
-            data.forEach((school) => {
-                schoolMap[school.id] = school.name;
-            });
-
-            setSchools(schoolMap);
-        } catch (err) {
-            console.error(err);
-            setError("Could not load schools.");
-        }
-    };
-    const deleteInstructor = async (id: string) => {
-        try {
-            await apiRequest<void>(`instructor/${id}`, "DELETE")
-
-            setSelectedInstructor(null);
-            setInstructors((prev) => prev.filter((instructor) => instructor.id !== id));
-        } catch (err) {
-            console.error(err);
-            setError("Could not delete instructor.");
-        }
-    };
+    const [displayInstructor, setDisplayInstructor] = useState<typeof selectedInstructor>(null);
 
     useEffect(() => {
-        fetchInstructors();
-        fetchSchools();
-    }, []);
+        if (selectedInstructor) {
+            setDisplayInstructor(selectedInstructor);
+        } else {
+            setDisplayInstructor(null);
+        }
+    }, [selectedInstructor]);
 
-    if (loading) {
+    const getSchoolName = (schoolId?: string) => {
+        if (!schoolId) return "Unknown school";
+
+        return schools.find((school) => school.id === schoolId)?.Name ?? "Unknown school";
+    };
+
+    const deleteInstructor = async (id: string) => {
+        try {
+            setLocalError("");
+            setLocalMessage("");
+
+            await apiRequest<void>(`instructor/${id}`, "DELETE");
+
+            clearInstructor();
+            removeInstructor(id);
+        } catch (err) {
+            console.error(err);
+            setLocalError("Could not delete instructor.");
+        }
+    };
+
+    if (instructorsLoading || schoolsLoading) {
         return <p>Loading instructors...</p>;
     }
 
@@ -97,7 +69,11 @@ function AdminInstructorView() {
         <div className="cardBox">
             <h2>Instruktører</h2>
 
-            {error && <p>{error}</p>}
+            {localError && <p>{localError}</p>}
+            {localMessage && <p>{localMessage}</p>}
+            {schoolsError && <p>{schoolsError}</p>}
+            {instructorsError && <p>{instructorsError}</p>}
+            {instructorDetailsError && <p>{instructorDetailsError}</p>}
 
             {!selectedInstructor && (
                 <>
@@ -108,17 +84,20 @@ function AdminInstructorView() {
                         <span>Telefon nummer</span>
                     </div>
 
-                    {instructors.map((instructor) => (
+                    {Instructors.map((instructor) => (
                         <button
                             className="InstructorRow instructorRowButton"
                             key={instructor.id}
-                            onClick={() => fetchInstructorById(instructor.id)}
+                            onClick={() => {
+                                setLocalError("");
+                                setLocalMessage("");
+                                fetchInstructorById(instructor.id);
+                            }}
                             type="button"
                         >
                             <span>{instructor.id}</span>
                             <span>{instructor.emailAddress}</span>
-                            <span>{schools[instructor.schoolId ?? ""] ?? "Unknown school"}</span>
-
+                            <span>{getSchoolName(instructor.schoolId)}</span>
                             <span>{instructor.phoneNumber}</span>
                         </button>
                     ))}
@@ -127,33 +106,76 @@ function AdminInstructorView() {
 
             {detailsLoading && <p>Loading instructor details...</p>}
 
-            {selectedInstructor && !detailsLoading && (
+            {selectedInstructor && displayInstructor && !detailsLoading && (
                 <div className="InstructorDetails">
                     <button
                         className="backButton"
-                        onClick={() => setSelectedInstructor(null)}
+                        onClick={() => {
+                            setLocalError("");
+                            setLocalMessage("");
+                            clearInstructor();
+                        }}
                         type="button"
                     >
-                        Back to instructors
+                        Tilbage til oversigt
                     </button>
 
-                    <h3>
-                        {selectedInstructor.name?.firstName}{" "}
-                        {selectedInstructor.name?.lastName}
-                    </h3>
+                    <div className="instructorEditForm">
+                        <label>
+                            Fornavn
+                            <input
+                                value={displayInstructor.name?.FirstName ?? ""}
+                                disabled
+                            />
+                        </label>
 
-                    <p><strong>ID:</strong> {selectedInstructor.id}</p>
-                    <p><strong>School ID:</strong> {selectedInstructor.schoolId}</p>
-                    <p><strong>Email:</strong> {selectedInstructor.emailAddress}</p>
-                    <p><strong>Phone:</strong> {selectedInstructor.phoneNumber}</p>
+                        <label>
+                            ID
+                            <input
+                                value={displayInstructor.id}
+                                disabled
+                            />
+                        </label>
 
+                        <label>
+                            Efternavn
+                            <input
+                                value={displayInstructor.name?.LastName ?? ""}
+                                disabled
+                            />
+                        </label>
+
+                        <label>
+                            Køreskole
+                            <input
+                                value={getSchoolName(displayInstructor.schoolId)}
+                                disabled
+                            />
+                        </label>
+
+                        <label>
+                            Email
+                            <input
+                                value={displayInstructor.emailAddress ?? ""}
+                                disabled
+                            />
+                        </label>
+
+                        <label>
+                            Telefonnummer
+                            <input
+                                value={displayInstructor.phoneNumber ?? ""}
+                                disabled
+                            />
+                        </label>
+                    </div>
 
                     <button
                         className="deleteButton"
-                        onClick={() => deleteInstructor(selectedInstructor.id)}
+                        onClick={() => deleteInstructor(displayInstructor.id)}
                         type="button"
                     >
-                        Delete instructor
+                        Slet instruktør
                     </button>
                 </div>
             )}

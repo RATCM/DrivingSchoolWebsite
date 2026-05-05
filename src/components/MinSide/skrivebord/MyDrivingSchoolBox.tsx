@@ -14,15 +14,6 @@ function MyDrivingSchoolBox() {
     const [drivingSchool, setDrivingSchool] = useState<DrivingSchoolModel | null>(null);
     const [error, setError] = useState("");
 
-    const drivingInstructor = new InstructorModel(
-        "albert",
-        "albert@dtu.dk",
-        "fghjkjhghjklhgfghj",
-        "+45 11 22 33 44",
-        null
-    );
-
-    const vm = mapUserViewModel(drivingInstructor);
 
     useEffect(() => {
         if (selfError) {

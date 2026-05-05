@@ -1,30 +1,23 @@
 import "./AdminViewDrivingSchool.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { apiRequest } from "../../../Api/apiRequest";
 import DrivingSchoolModel from "../../../model/DrivingSchoolModel";
 import DrivingSchoolGetDTO from "../../../DTO/DrivingSchoolGetDTO";
 import GetDTOtoModel from "../../../Mappers/GetDTOtoModel";
+import useDrivingSchools from "../../Functions/fetchDrivingSchools";
 
 function AdminViewDrivingSchool() {
-    const [drivingSchools, setDrivingSchools] = useState<DrivingSchoolModel[]>([]);
     const [selectedDrivingSchool, setSelectedDrivingSchool] = useState<DrivingSchoolModel | null>(null);
     const [expandedPackageIndexes, setExpandedPackageIndexes] = useState<number[]>([]);
-    const [loading, setLoading] = useState(true);
     const [detailsLoading, setDetailsLoading] = useState(false);
     const [error, setError] = useState("");
-
-    const fetchDrivingSchools = async () => {
-        try {
-            const data = await apiRequest<DrivingSchoolGetDTO[]>("drivingschool");
-            const drivingSchoolArray = data.map((dto) => GetDTOtoModel(dto));
-            setDrivingSchools(drivingSchoolArray);
-        } catch (err) {
-            console.error(err);
-            setError("Could not load driving schools.");
-        } finally {
-            setLoading(false);
-        }
-    };
+    const {
+        drivingSchools: schools,
+        setDrivingSchools: setDrivingSchools,
+        loading: schoolsLoading,
+        error: schoolsError,
+        removeSchool: removeSchool,
+    } = useDrivingSchools();
 
     const fetchDrivingSchoolById = async (id: string) => {
         setDetailsLoading(true);
@@ -48,9 +41,7 @@ function AdminViewDrivingSchool() {
             await apiRequest<void>(`drivingschool/${id}`, "DELETE");
 
             setSelectedDrivingSchool(null);
-            setDrivingSchools((prev) =>
-                prev.filter((school) => school.id !== id)
-            );
+            removeSchool(id)
         } catch (err) {
             console.error(err);
             setError("Could not delete driving school.");
@@ -99,12 +90,11 @@ function AdminViewDrivingSchool() {
         }
     };
 
-    useEffect(() => {
-        fetchDrivingSchools();
-    }, []);
-
-    if (loading) {
+    if (schoolsLoading) {
         return <p>Loading driving schools...</p>;
+    }
+    if (schoolsError) {
+        return <p>{schoolsError}</p>;
     }
 
     return (
@@ -117,12 +107,12 @@ function AdminViewDrivingSchool() {
                 <>
                     <div className="DrivingSchoolHeader">
                         <span>ID</span>
-                        <span>Name</span>
-                        <span>Web address</span>
-                        <span>Phone</span>
+                        <span>Navn</span>
+                        <span>Hjemmeside link</span>
+                        <span>TelefonNummer</span>
                     </div>
 
-                    {drivingSchools.map((school) => (
+                    {schools.map((school) => (
                         <button
                             className="DrivingSchoolRow DrivingSchoolRowButton"
                             key={school.id}
@@ -147,20 +137,20 @@ function AdminViewDrivingSchool() {
                         onClick={() => setSelectedDrivingSchool(null)}
                         type="button"
                     >
-                        Back to driving schools
+                        Tilbage til Overblikket
                     </button>
 
                     <h3>{selectedDrivingSchool.Name}</h3>
 
                     <p>
-                        <strong>Address:</strong>{" "}
+                        <strong>Adresse:</strong>{" "}
                         {selectedDrivingSchool.StreetAddress?.AddressLine},{" "}
                         {selectedDrivingSchool.StreetAddress?.PostalCode}{" "}
                         {selectedDrivingSchool.StreetAddress?.City}
                     </p>
 
                     <h4>
-                        <strong>Packages</strong>
+                        <strong>Pakker</strong>
                     </h4>
 
                     {selectedDrivingSchool.Packages?.map((pack, index) => (
@@ -201,7 +191,7 @@ function AdminViewDrivingSchool() {
                         onClick={() => deleteDrivingSchool(selectedDrivingSchool.id)}
                         type="button"
                     >
-                        Delete driving school
+                        Slet køreskole
                     </button>
                 </div>
             )}

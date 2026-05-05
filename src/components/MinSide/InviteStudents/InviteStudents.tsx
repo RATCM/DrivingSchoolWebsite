@@ -2,18 +2,8 @@ import GetSelf from "../../Functions/GetSelf";
 import {useEffect, useState} from "react";
 import StudentInviteDTO from "../../../DTO/StudentInviteDTO";
 import {apiRequest} from "../../../Api/apiRequest";
-
-type Instructor = {
-    id: string;
-    schoolId: string;
-    name: {
-        firstName: string;
-        lastName: string;
-    };
-    emailAddress: string;
-    phoneNumber: string;
-    [key: string]: unknown;
-};
+import Instructor from "../../../model/Instructor";
+import "./InviteStudents.css";
 
 function InviteStudents() {
     const { id: myId, error: selfError } = GetSelf()
@@ -27,14 +17,10 @@ function InviteStudents() {
         return invite.inviteId
     };
 
-
-
-
-
     const getInviteLink = (invite: StudentInviteDTO) => {
         const inviteId = getInviteId(invite);
 
-        return `${window.location.origin}/register?inviteid=${inviteId}`;
+        return `${window.location.origin}/user_invite?inviteid=${inviteId}`;
     };
 
     const fetchInstructorAndInvites = async () => {
@@ -125,7 +111,7 @@ function InviteStudents() {
             <div className="invite-header">
                 <div>
                     <h1>Student Invites</h1>
-                    <p>Generate and manage invite links for students.</p>
+                    <p>Generer og vedligehold invite links for studerende.</p>
                 </div>
 
                 <button
@@ -142,8 +128,8 @@ function InviteStudents() {
             <div className="invite-table">
                 <div className="invite-row invite-row-header">
                     <div>Invite link</div>
-                    <div>Expires</div>
                     <div>Actions</div>
+                    <div>Expires</div>
                 </div>
 
                 {invites.length === 0 ? (

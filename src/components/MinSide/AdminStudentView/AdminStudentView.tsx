@@ -1,93 +1,68 @@
 import "./AdminStudentview.css";
 import { useEffect, useState } from "react";
-import {apiRequest} from "../../../Api/apiRequest";
-
-type Student = {
-    id: string;
-    schoolId?: string;
-    studentName?: {
-        firstName?: string;
-        lastName?: string;
-    };
-    emailAddress?: string;
-    phoneNumber?: string;
-    theoryLessons?: unknown;
-    drivingLessons?: unknown;
-};
-type School = {
-    id: string;
-    name: string;
-};
+import { apiRequest } from "../../../Api/apiRequest";
+import useDrivingSchools from "../../Functions/fetchDrivingSchools";
+import useStudents from "../../Functions/useStudents";
+import useStudentById from "../../Functions/useStudentbyId";
 
 function AdminStudentView() {
-    const [students, setStudents] = useState<Student[]>([]);
-    const [schools, setSchools] = useState<Record<string, string>>({});
-    const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [detailsLoading, setDetailsLoading] = useState(false);
-    const [error, setError] = useState("");
+    const [localError, setLocalError] = useState("");
+    const [localMessage, setLocalMessage] = useState("");
 
-    const fetchStudents = async () => {
-        try {
-            const data = await apiRequest<Student[]>('student');
-            setStudents(data);
-        } catch (err) {
-            console.error(err);
-            setError("Could not load students.");
-        } finally {
-            setLoading(false);
+    const {
+        drivingSchools: schools,
+        loading: schoolsLoading,
+        error: schoolsError
+    } = useDrivingSchools();
+
+    const {
+        students,
+        loading: studentsLoading,
+        error: studentsError,
+        removeStudent,
+        fetchStudent
+    } = useStudents();
+
+    const {
+        student: selectedStudent,
+        loading: detailsLoading,
+        error: studentDetailsError,
+        fetchStudentById,
+        clearStudent
+    } = useStudentById();
+
+    const [editableStudent, setEditableStudent] = useState<typeof selectedStudent>(null);
+
+    useEffect(() => {
+        if (selectedStudent) {
+            setEditableStudent(selectedStudent);
+        } else {
+            setEditableStudent(null);
         }
-    };
-    const fetchSchools = async () => {
-        try {
-            const data: School[] = await apiRequest<School[]>('drivingschool');
+    }, [selectedStudent]);
 
-            const schoolMap: Record<string, string> = {};
-            data.forEach((school) => {
-                schoolMap[school.id] = school.name;
-            });
+    const getSchoolName = (schoolId?: string) => {
+        if (!schoolId) return "Unknown school";
 
-            setSchools(schoolMap);
-        } catch (err) {
-            console.error(err);
-            setError("Could not load schools.");
-        }
-    };
-
-    const fetchStudentById = async (id: string) => {
-        setDetailsLoading(true);
-        setError("");
-
-        try {
-
-            const data = await apiRequest<Student>(`student/${id}`);
-            setSelectedStudent(data);
-        } catch (err) {
-            console.error(err);
-            setError("Could not load student details.");
-        } finally {
-            setDetailsLoading(false);
-        }
+        return schools.find((school) => school.id === schoolId)?.Name ?? "Unknown school";
     };
 
     const deleteStudent = async (id: string) => {
         try {
+            setLocalError("");
+            setLocalMessage("");
+
             await apiRequest<void>(`student/${id}`, "DELETE");
 
-            setSelectedStudent(null);
-            setStudents((prev) => prev.filter((student) => student.id !== id));
+            clearStudent();
+            removeStudent(id);
         } catch (err) {
             console.error(err);
-            setError("Could not delete student.");
+            setLocalError("Could not delete student.");
         }
     };
 
-    useEffect(() => {
-        fetchStudents();
-        fetchSchools();
-    }, []);
-
-    if (loading) {
+    if (studentsLoading || schoolsLoading) {
         return <p>Loading students...</p>;
     }
 
@@ -95,7 +70,11 @@ function AdminStudentView() {
         <div className="cardBox">
             <h2>Studerende</h2>
 
-            {error && <p>{error}</p>}
+            {localError && <p>{localError}</p>}
+            {localMessage && <p>{localMessage}</p>}
+            {schoolsError && <p>{schoolsError}</p>}
+            {studentsError && <p>{studentsError}</p>}
+            {studentDetailsError && <p>{studentDetailsError}</p>}
 
             {!selectedStudent && (
                 <>
@@ -110,51 +89,95 @@ function AdminStudentView() {
                         <button
                             className="StudentRow studentRowButton"
                             key={student.id}
-                            onClick={() => fetchStudentById(student.id)}
+                            onClick={() => {
+                                setLocalError("");
+                                setLocalMessage("");
+                                fetchStudentById(student.id);
+                            }}
                             type="button"
                         >
                             <span>{student.id}</span>
                             <span>{student.emailAddress}</span>
-                            <span>{schools[student.schoolId ?? ""] ?? "Unknown school"}</span>
-
+                            <span>{getSchoolName(student.schoolId)}</span>
                             <span>{student.phoneNumber}</span>
                         </button>
                     ))}
                 </>
             )}
 
-            {detailsLoading && <p>Loading instructor details...</p>}
+            {detailsLoading && <p>Loading student details...</p>}
 
-            {selectedStudent && !detailsLoading && (
+            {selectedStudent && editableStudent && !detailsLoading && (
                 <div className="StudentDetails">
                     <button
                         className="backButton"
-                        onClick={() => setSelectedStudent(null)}
+                        onClick={() => {
+                            setLocalError("");
+                            setLocalMessage("");
+                            clearStudent();
+                        }}
                         type="button"
                     >
-                        Back to student overview
+                        Tilbage til oversigt
                     </button>
 
-                    <h3>
-                        <strong>
-                        {selectedStudent.studentName?.firstName}{" "}
-                        {selectedStudent.studentName?.lastName}
-                        </strong>
-                    </h3>
+                    <div className="studentEditForm">
+                        <label>
+                            Fornavn
+                            <input
+                                value={editableStudent.name?.FirstName ?? ""}
+                                disabled
+                            />
+                        </label>
+                        <label>
+                            ID
+                            <input
+                                value={editableStudent.id}
+                                disabled
+                            />
+                        </label>
 
-                    <p><strong>ID:</strong> {selectedStudent.id}</p>
-                    <p><strong>School ID:</strong> {selectedStudent.schoolId}</p>
-                    <p><strong>Email:</strong> {selectedStudent.emailAddress}</p>
-                    <p><strong>Phone:</strong> {selectedStudent.phoneNumber}</p>
+                        <label>
+                            Efternavn
+                            <input
+                                value={editableStudent.name?.LastName ?? ""}
+                                disabled
+                            />
+                        </label>
 
+                        <label>
+                            Køreskole
+                            <input
+                                value={getSchoolName(editableStudent.schoolId)}
+                                disabled
+                            />
+                        </label>
+
+                        <label>
+                            Email
+                            <input
+                                value={editableStudent.emailAddress ?? ""}
+                                disabled
+                            />
+                        </label>
+
+                        <label>
+                            Telefonnummer
+                            <input
+                                value={editableStudent.phoneNumber ?? ""}
+                                disabled
+                            />
+                        </label>
+                    </div>
 
                     <button
                         className="deleteButton"
-                        onClick={() => deleteStudent(selectedStudent.id)}
+                        onClick={() => deleteStudent(editableStudent.id)}
                         type="button"
                     >
-                        Delete student
+                        Slet studerende
                     </button>
+
                 </div>
             )}
         </div>
