@@ -1,0 +1,13 @@
+services:
+  frontend:
+    container_name: driving-school-frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+      args :
+        REACT_APP_API_URL: ${REACT_APP_API_BASE_URL}
+        REACT_APP_GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY}
+    ports:
+      - "3000:80"
+    restart: unless-stopped
