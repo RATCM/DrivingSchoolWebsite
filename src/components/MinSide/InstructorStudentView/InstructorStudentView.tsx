@@ -73,18 +73,6 @@ function InstructorStudentView() {
         }
     };
 
-    const deleteStudent = async (id: string) => {
-        try {
-            await apiRequest<void>(`student/${id}`, "DELETE")
-
-            setSelectedStudent(null);
-            setStudents((prev) => prev.filter((student) => student.id !== id));
-        } catch (err) {
-            console.error(err);
-            setError("Could not delete student.");
-        }
-    };
-
     useEffect(() => {
         if (selfError) {
             setError(selfError);
@@ -162,15 +150,6 @@ function InstructorStudentView() {
                     <p><strong>Email:</strong> {selectedStudent.emailAddress}</p>
                     <p><strong>Phone:</strong> {selectedStudent.phoneNumber}</p>
 
-
-
-                    <button
-                        className="deleteButton"
-                        onClick={() => deleteStudent(selectedStudent.id)}
-                        type="button"
-                    >
-                        Delete student
-                    </button>
                 </div>
             )}
         </div>

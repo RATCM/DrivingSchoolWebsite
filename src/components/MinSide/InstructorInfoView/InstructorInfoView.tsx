@@ -6,6 +6,7 @@ import Instructor from "../../../model/Instructor";
 import GetSelfFull from "../../Functions/GetSelfFull";
 import InstructorDTOtoModel from "../../../Mappers/InstructorDTOtoModel";
 import InstructorDTO from "../../../DTO/InstructorDTO";
+import InstructorModeltoUpdateDTO from "../../../Mappers/InstructorModeltoUpdateDTO";
 
 function InstructorInfoView() {
     const [localError, setLocalError] = useState("");
@@ -26,19 +27,29 @@ function InstructorInfoView() {
         return schools.find((school) => school.id === schoolId)?.Name ?? "Unknown school";
     };
 
-    const deleteStudent = async (id: string) => {
+    const deleteInstructor = async (id: string) => {
         try {
             setLocalError("");
             setLocalMessage("");
 
-            await apiRequest<void>(`student/${id}`, "DELETE");
+            await apiRequest<void>(`instructor/${id}`, "DELETE");
 
 
         } catch (err) {
             console.error(err);
-            setLocalError("Could not delete student.");
+            setLocalError("Kunne ikke slette brugeren.");
         }
     };
+    const updateInstructor = async (updatedInstructor: Instructor) => {
+        try {
+            setLocalError("");
+            setLocalMessage("");
+            await apiRequest<void>(`instructor/${updatedInstructor.id}`, "PUT", InstructorModeltoUpdateDTO(updatedInstructor));
+        } catch (err) {
+            console.error(err);
+            setLocalError("Kunne ikke opdatere brugeren.");
+        }
+    }
     useEffect(() => {
         if (selfError) {
             setLocalError(selfError);
@@ -52,6 +63,7 @@ function InstructorInfoView() {
     if ( schoolsLoading || !editableInstructor) {
         return <p>Loading student...</p>;
     }
+
     return (
         <div className="cardBox">
             <h2>Min Info</h2>
@@ -66,7 +78,15 @@ function InstructorInfoView() {
                         Fornavn
                         <input
                             value={editableInstructor.name?.FirstName ?? ""}
-                            disabled
+                            onChange={(e) =>
+                                setEditableInstructor({
+                                    ...editableInstructor,
+                                    name: {
+                                        ...editableInstructor.name,
+                                        FirstName: e.target.value
+                                    }
+                                })
+                            }
                         />
                     </label>
                     <label>
@@ -81,6 +101,15 @@ function InstructorInfoView() {
                         Efternavn
                         <input
                             value={editableInstructor.name?.LastName ?? ""}
+                            onChange={(e) =>
+                                setEditableInstructor({
+                                    ...editableInstructor,
+                                    name: {
+                                        ...editableInstructor.name,
+                                        LastName: e.target.value
+                                    }
+                                })
+                            }
                         />
                     </label>
 
@@ -96,7 +125,12 @@ function InstructorInfoView() {
                         Email
                         <input
                             value={editableInstructor.emailAddress ?? ""}
-                            disabled
+                            onChange={(e) =>
+                                setEditableInstructor({
+                                    ...editableInstructor,
+                                    emailAddress: e.target.value
+                                })
+                            }
                         />
                     </label>
 
@@ -104,19 +138,30 @@ function InstructorInfoView() {
                         Telefonnummer
                         <input
                             value={editableInstructor.phoneNumber ?? ""}
-                            disabled
+                            onChange={(e) =>
+                                setEditableInstructor({
+                                    ...editableInstructor,
+                                    phoneNumber: e.target.value
+                                })
+                            }
                         />
                     </label>
                 </div>
 
                 <button
                     className="deleteButton"
-                    onClick={() => deleteStudent(editableInstructor.id)}
+                    onClick={() => deleteInstructor(editableInstructor.id)}
                     type="button"
                 >
                     Slet Bruger
                 </button>
-
+                <button
+                    className="updateButton"
+                    onClick={() => updateInstructor(editableInstructor)}
+                    type="button"
+                    >
+                    Opdater Bruger
+                </button>
             </div>
         </div>
     )

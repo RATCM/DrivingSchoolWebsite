@@ -26,6 +26,9 @@ export default function useDrivingSchools() {
             setLoading(false);
         }
     };
+    const removeSchool = (id: string) => {
+        setDrivingSchools((prev) => prev.filter((DrivingSchools) => DrivingSchools.id !== id));
+    };
 
     useEffect(() => {
         fetchDrivingSchools();
@@ -36,6 +39,7 @@ export default function useDrivingSchools() {
         setDrivingSchools,
         fetchDrivingSchools,
         loading,
-        error
+        error,
+        removeSchool
     };
 }

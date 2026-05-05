@@ -82,7 +82,7 @@ function AdminCreateDrivingSchool() {
 
                 <form onSubmit={handleCreateDrivingschool} className="admin-form">
                     <label>
-                        Name
+                        Navn
                         <input
                             type="text"
                             value={Name}
@@ -91,7 +91,7 @@ function AdminCreateDrivingSchool() {
                         />
                     </label>
                     <label>
-                        Address
+                        Adresse
                         <input
                             type="text"
                             value={Address}
@@ -101,7 +101,7 @@ function AdminCreateDrivingSchool() {
                     </label>
 
                     <label>
-                        PostalCode
+                        Postnummer
                         <input
                             type="text"
                             value={PostalCode}
@@ -110,7 +110,7 @@ function AdminCreateDrivingSchool() {
                         />
                     </label>
                     <label>
-                        City
+                        By
                         <input
                             type="text"
                             value={City}
@@ -128,7 +128,7 @@ function AdminCreateDrivingSchool() {
                         />
                     </label>
                     <label>
-                        Phone number
+                        Telefonnummer
                         <input
                             type="text"
                             value={phoneNumber}
@@ -138,7 +138,7 @@ function AdminCreateDrivingSchool() {
                     </label>
 
                     <label>
-                        WebAddress
+                        Hjemmeside
                         <input
                             type="WebAddress"
                             value={WebAddress}
@@ -152,13 +152,13 @@ function AdminCreateDrivingSchool() {
 
 
                     <div className="packages-section">
-                        <h2>Packages</h2>
+                        <h2>Pakker</h2>
 
                         {packages.map((pkg, index) => (
                             <div className="package-row" key={index}>
                                 <input
                                     type="text"
-                                    placeholder="Package title"
+                                    placeholder="Pakke titel"
                                     value={pkg.Title}
                                     onChange={(e) =>
                                         handlePackageChange(index, "title", e.target.value)
@@ -168,7 +168,7 @@ function AdminCreateDrivingSchool() {
 
                                 <input
                                     type="text"
-                                    placeholder="Description"
+                                    placeholder="Beskrivelse"
                                     value={pkg.Description}
                                     onChange={(e) =>
                                         handlePackageChange(index, "description", e.target.value)
@@ -178,7 +178,7 @@ function AdminCreateDrivingSchool() {
 
                                 <input
                                     type="number"
-                                    placeholder="Price"
+                                    placeholder="Pris"
                                     value={pkg.Price.Amount}
                                     onChange={(e) =>
                                         handlePackageChange(index, "price", e.target.value)

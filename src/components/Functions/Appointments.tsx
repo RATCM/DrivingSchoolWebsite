@@ -5,9 +5,21 @@ import DrivingLessonModel from "../../model/DrivingLessonModel";
 import GetSelf from "./GetSelf";
 import { mapDrivingLessonDTOsToModels } from "../../Mappers/DrivingLessonMapper";
 
+type Role = "student" | "instructor" | "admin";
+
+function getCookie(name: string): string | null {
+    const value = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith(name + "="));
+
+    return value ? decodeURIComponent(value.split("=")[1]) : null;
+}
+
+
+
 export function useAppointments() {
     const { id: myId, error: selfError } = GetSelf();
-
+    const role = (getCookie("role") ?? "student") as Role;
     const [drivingLessons, setDrivingLessons] = useState<DrivingLessonModel[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -25,13 +37,21 @@ export function useAppointments() {
             setError("");
 
             try {
-                const data = await apiRequest<DrivingLessonDTO[]>(
-                    `student/${myId}/drivingLesson`
-                );
-
-                const mappedLessons = mapDrivingLessonDTOsToModels(data);
-
-                setDrivingLessons(mappedLessons);
+                if (role === "student") {
+                    const data = await apiRequest<DrivingLessonDTO[]>(
+                        `student/${myId}/drivingLesson`
+                    );
+                    const mappedLessons = mapDrivingLessonDTOsToModels(data);
+                    setDrivingLessons(mappedLessons);
+                } else if (role === "instructor") {
+                    const data = await apiRequest<DrivingLessonDTO[]>(
+                        `instructor/${myId}/drivingLesson`
+                    );
+                    const mappedLessons = mapDrivingLessonDTOsToModels(data);
+                    setDrivingLessons(mappedLessons);
+                } else setError(
+                    "Could not load driving lesson history."
+                )
             } catch (err) {
                 console.error(err);
                 setError("Could not load driving lesson history.");

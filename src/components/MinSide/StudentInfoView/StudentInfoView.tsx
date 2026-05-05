@@ -6,6 +6,7 @@ import Student from "../../../model/Student";
 import GetSelfFull from "../../Functions/GetSelfFull";
 import StudentDTOtoModel from "../../../Mappers/StudentDTOtoModel";
 import StudentDTO from "../../../DTO/StudentDTO";
+import StudentModeltoUpdateDTO from "../../../Mappers/StudentModeltoUpdateDTO";
 
 function StudentInfoView() {
     const [localError, setLocalError] = useState("");
@@ -36,9 +37,20 @@ function StudentInfoView() {
 
         } catch (err) {
             console.error(err);
-            setLocalError("Could not delete student.");
+            setLocalError("Kunne ikke slette brugeren.");
         }
     };
+    const updateStudent = async (updatedStudent: Student) => {
+        try {
+            setLocalError("");
+            setLocalMessage("");
+
+            await apiRequest<void>(`student/${updatedStudent.id}`, "PUT", StudentModeltoUpdateDTO(updatedStudent));
+        } catch (err) {
+            console.error(err);
+            setLocalError("Kunne ikke opdatere brugeren.");
+        }
+    }
     useEffect(() => {
         if (selfError) {
             setLocalError(selfError);
@@ -66,7 +78,15 @@ function StudentInfoView() {
                         Fornavn
                         <input
                             value={editableStudent.name?.FirstName ?? ""}
-                            disabled
+                            onChange={(e) =>
+                                setEditableStudent({
+                                    ...editableStudent,
+                                    name: {
+                                        ...editableStudent.name,
+                                        FirstName: e.target.value
+                                    }
+                                })
+                            }
                         />
                     </label>
                     <label>
@@ -81,6 +101,15 @@ function StudentInfoView() {
                         Efternavn
                         <input
                             value={editableStudent.name?.LastName ?? ""}
+                            onChange={(e) =>
+                                setEditableStudent({
+                                    ...editableStudent,
+                                    name: {
+                                        ...editableStudent.name,
+                                        LastName: e.target.value
+                                    }
+                                })
+                            }
                         />
                     </label>
 
@@ -96,7 +125,12 @@ function StudentInfoView() {
                         Email
                         <input
                             value={editableStudent.emailAddress ?? ""}
-                            disabled
+                            onChange={(e) =>
+                                setEditableStudent({
+                                    ...editableStudent,
+                                    phoneNumber: e.target.value
+                                })
+                            }
                         />
                     </label>
 
@@ -104,7 +138,12 @@ function StudentInfoView() {
                         Telefonnummer
                         <input
                             value={editableStudent.phoneNumber ?? ""}
-                            disabled
+                            onChange={(e) =>
+                                setEditableStudent({
+                                    ...editableStudent,
+                                    phoneNumber: e.target.value
+                                })
+                            }
                         />
                     </label>
                 </div>
@@ -114,7 +153,14 @@ function StudentInfoView() {
                     onClick={() => deleteStudent(editableStudent.id)}
                     type="button"
                 >
-                    Slet studerende
+                    Slet bruger
+                </button>
+                <button
+                    className="updateButton"
+                    onClick={() => updateStudent(editableStudent)}
+                    type="button"
+                    >
+                    Opdater bruger
                 </button>
 
             </div>

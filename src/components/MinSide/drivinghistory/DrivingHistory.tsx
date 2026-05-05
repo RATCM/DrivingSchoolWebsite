@@ -1,5 +1,5 @@
 import "./DrivingHistory.css";
-import getAppointments, { useHistory } from "../../Functions/History";
+import { useHistory } from "../../Functions/History";
 import { useNavigate } from "react-router-dom";
 
 

@@ -15,7 +15,7 @@ function App() {
         <Router>
             <Topbar />
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Koreskoler />} />
                 <Route path="/koreskoler" element={<Koreskoler />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/min_side" element={<MinSide/>} />

@@ -4,7 +4,6 @@ import { apiRequest } from "../../../Api/apiRequest";
 import useDrivingSchools from "../../Functions/fetchDrivingSchools";
 import useStudents from "../../Functions/useStudents";
 import useStudentById from "../../Functions/useStudentbyId";
-import StudentModelToDTO from "../../../Mappers/StudentModeltoDTO";
 
 function AdminStudentView() {
     const [localError, setLocalError] = useState("");
