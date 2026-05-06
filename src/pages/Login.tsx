@@ -5,7 +5,7 @@ import {API_BASE_URL} from "../Api/config";
 
 
 function Login() {
-
+    const [error, setError] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("student");
@@ -46,7 +46,8 @@ function Login() {
         
         navigate("/min_side");
     } catch (error) {
-        return <span>Forkert Brugernavn eller Adgangskode</span>
+        setError("Invalid email or password");
+        return
         }
     };
     return (
@@ -76,6 +77,7 @@ function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
+                {error && <p className="login-error">{error}</p>}
                 <select
                     className="login-input"
                     value={role}
@@ -85,9 +87,11 @@ function Login() {
                     <option value="instructor">Instructor</option>
                     <option value="admin">Admin</option>
                 </select>
+
                 <button className="login-button" onClick={handleLogin}>
                     Log ind
                 </button>
+
             </div>
         </div>
     );
