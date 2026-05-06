@@ -11,9 +11,10 @@ import DrivingSchoolModel from "../model/DrivingSchoolModel";
 
 function Koreskoler() {
     const [drivingSchoolViewModels, setDrivingSchoolViewModels] = React.useState<DrivingSchoolViewModel[]>([]);
+    const [loading, setLoading] = React.useState(true);
     const [error, setError] = React.useState("");
 
-    const getAllDrivingSchools = async () => {
+    async function getAllDrivingSchools() {
         try {
             const data = await apiRequest<DrivingSchoolGetDTO[]>("drivingschool");
             const drivingSchoolArray = data.map((dto) => GetDTOtoModel(dto));
@@ -22,6 +23,7 @@ function Koreskoler() {
                 const result = await getDrivingSchoolRatings(drivingSchoolArray[i])
                 viewModelArray.push(mapDrivingSchoolViewModel(drivingSchoolArray[i],`${result[0].toFixed(2)}` ,`${result[1].toFixed(2)}`))
             }
+            setLoading(false);
             setDrivingSchoolViewModels(viewModelArray);
         } catch (err) {
             console.error(err);
@@ -41,7 +43,9 @@ function Koreskoler() {
     }
 
     React.useEffect(() => {
-            getAllDrivingSchools();
+            if (loading) {
+                getAllDrivingSchools();
+            }
         }
     )
 

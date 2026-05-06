@@ -44,8 +44,8 @@ const allItems: NavigationItem[] = [
 ];
 
 function MinSide() {
-    const role = (getCookie("role") ?? "student") as Role;
-
+    const cookieRole = getCookie("role") as Role | null;
+    const role = cookieRole;
     const items = useMemo(() => {
         if (role === "admin") {
             return allItems.filter(
@@ -83,6 +83,11 @@ function MinSide() {
 
     const [active, setActive] = useState(items[0].id);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+    if (role === null) {
+        return <>Ikke logget ind</>;
+    }
+
 
     return (
         <div className="minSideLayout">
