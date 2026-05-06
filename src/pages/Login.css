@@ -39,3 +39,10 @@
 .login-button:hover {
     background-color: #1943A6;
 }
+
+.login-error {
+    color: red;
+    margin-bottom: 12px;
+    display: block;
+    font-size: 14px;
+}
