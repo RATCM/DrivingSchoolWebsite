@@ -5,7 +5,7 @@ import {API_BASE_URL} from "../Api/config";
 
 
 function Login() {
-    //const axios = require('axios/sist/browser/axios.cjs');
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("student");
@@ -14,11 +14,11 @@ function Login() {
     const inviteToken = searchParams.get("invite_token");
     const baseuri = API_BASE_URL
     
-    /*Add call to Login method on backend to log in*/
+
     const handleLogin = async () => {
         
     try {
-        //const uri = "http://localhost:5259/admin/login";
+
         const uri =baseuri + "auth/login/" + role;
         
         const response = await fetch(uri, {
