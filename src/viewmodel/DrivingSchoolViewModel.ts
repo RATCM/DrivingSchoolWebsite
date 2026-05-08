@@ -41,8 +41,8 @@ export function mapDrivingSchoolViewModel(model: DrivingSchoolModel, passRate?: 
         region: `${model.StreetAddress.Region}`,
         packages: cheapestPackageString(),
         pricing: cheapestPackagePricing(),
-        passRate: passRate ? passRate: `80`,
-        avgPrice: avgPrice ? avgPrice: `100`
+        passRate: passRate ? passRate: `-1`,
+        avgPrice: avgPrice ? avgPrice: `-1`
     }
 }
 export default DrivingSchoolViewModel;
