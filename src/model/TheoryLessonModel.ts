@@ -1,28 +1,28 @@
-import LessonModel from "./LessonModel";
-import InstructorModel from "./InstructorModel";
-import DrivingSchoolModel from "./DrivingSchoolModel";
-import StudentModel from "./StudentModel";
+import Pricing from "./Submodels/Pricing";
 
-class TheoryLessonModel extends LessonModel{
-    date: number;
-    students: StudentModel[];
+class TheoryLessonModel {
+    id: string;
+    schoolId: string;
+    instructorId?: string;
+    lessonDateTime: Date;
+    price: Pricing;
+    studentId?: string;
 
     constructor(
-        instructor : InstructorModel,
-        instructorSignature: string,
-        drivingSchool : DrivingSchoolModel,
-        price: number,
-        date : number,
-        students: StudentModel[],
+        id: string,
+        schoolId: string,
+        instructorId: string | undefined,
+        lessonDateTime: Date,
+        price: Pricing,
+        studentId: string | undefined
     ) {
-        super(
-            instructor,
-            instructorSignature,
-            drivingSchool,
-            price
-        );
-        this.date = date;
-        this.students = students;
+        this.id = id;
+        this.schoolId = schoolId;
+        this.instructorId = instructorId;
+        this.lessonDateTime = lessonDateTime;
+        this.price = price;
+        this.studentId = studentId;
     }
 }
+
 export default TheoryLessonModel;

@@ -39,7 +39,7 @@ export function useHistory() {
                         `student/${myId}/drivingLesson`
                     );
                     const mappedLessons = mapDrivingLessonDTOsToModels(data);
-
+                    mappedLessons.sort((a, b) => a.route.dateTimeRange.startDateTime.getTime() - b.route.dateTimeRange.startDateTime.getTime());
                     setDrivingLessons(mappedLessons);
                 }
                 else if (role === "instructor") {
@@ -47,7 +47,7 @@ export function useHistory() {
                         `instructor/${myId}/drivingLesson`
                     );
                     const mappedLessons = mapDrivingLessonDTOsToModels(data);
-
+                    mappedLessons.sort((a,b) => a.route.dateTimeRange.startDateTime.getTime() - b.route.dateTimeRange.startDateTime.getTime());
                     setDrivingLessons(mappedLessons);
                 } else setError("Could not load driving lesson history.");
 
