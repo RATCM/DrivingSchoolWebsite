@@ -21,3 +21,26 @@
     border-bottom: 2px solid #ccc;
     margin-bottom: 10px;
 }
+.DrivingHistoryButtons {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.DrivingHistoryButtons button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 12px;
+    background-color: #e0e0e0;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.DrivingHistoryButtons button:hover {
+    background-color: #d0d0d0;
+}
+
+.activeHistoryButton {
+    background-color: #2f80ed !important;
+    color: white;
+}
