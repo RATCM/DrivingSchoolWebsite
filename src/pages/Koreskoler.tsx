@@ -38,7 +38,7 @@ function Koreskoler() {
         } catch (err) {
             console.error(err);
             setError("Fejl ved indlæsning af køreskoler ");
-            return [0,10];
+            return [-1,-1];
         }
     }
 
