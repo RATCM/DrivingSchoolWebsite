@@ -7,12 +7,13 @@ import GetSelfFull from "../../Functions/GetSelfFull";
 import StudentDTOtoModel from "../../../Mappers/StudentDTOtoModel";
 import StudentDTO from "../../../DTO/StudentDTO";
 import StudentModeltoUpdateDTO from "../../../Mappers/StudentModeltoUpdateDTO";
+import {useNavigate} from "react-router-dom";
 
 function StudentInfoView() {
     const [localError, setLocalError] = useState("");
     const [localMessage, setLocalMessage] = useState("");
     const { self: Self, error: selfError } = GetSelfFull<StudentDTO>();
-
+    const navigate = useNavigate();
     const {
         drivingSchools: schools,
         loading: schoolsLoading,
@@ -33,8 +34,10 @@ function StudentInfoView() {
             setLocalMessage("");
 
             await apiRequest<void>(`student/${id}`, "DELETE");
-
-
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            document.cookie = "role=; path=/; max-age=0";
+            navigate("/");
         } catch (err) {
             console.error(err);
             setLocalError("Kunne ikke slette brugeren.");

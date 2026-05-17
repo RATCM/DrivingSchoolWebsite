@@ -7,12 +7,13 @@ import GetSelfFull from "../../Functions/GetSelfFull";
 import InstructorDTOtoModel from "../../../Mappers/InstructorDTOtoModel";
 import InstructorDTO from "../../../DTO/InstructorDTO";
 import InstructorModeltoUpdateDTO from "../../../Mappers/InstructorModeltoUpdateDTO";
+import {useNavigate} from "react-router-dom";
 
 function InstructorInfoView() {
     const [localError, setLocalError] = useState("");
     const [localMessage, setLocalMessage] = useState("");
     const { self: Self, error: selfError } = GetSelfFull<InstructorDTO>();
-
+    const navigate = useNavigate();
     const {
         drivingSchools: schools,
         loading: schoolsLoading,
@@ -33,7 +34,10 @@ function InstructorInfoView() {
             setLocalMessage("");
 
             await apiRequest<void>(`instructor/${id}`, "DELETE");
-
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            document.cookie = "role=; path=/; max-age=0";
+            navigate("/");
 
         } catch (err) {
             console.error(err);
