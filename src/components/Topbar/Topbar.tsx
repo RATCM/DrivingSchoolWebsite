@@ -19,7 +19,16 @@ function Topbar() {
 
             </div>
             <div className={"topbar-right"}>
-                <button onClick={() => navigate("/login")}>Log ind</button>
+                <button
+                    onClick={() => {
+                        localStorage.removeItem("accessToken");
+                        localStorage.removeItem("refreshToken");
+                        document.cookie = "role=; path=/; max-age=0";
+                        navigate("/login");
+                    }}
+                >
+                    Log ind
+                </button>
             </div>
         </div>
     );
