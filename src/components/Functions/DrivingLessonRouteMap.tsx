@@ -2,9 +2,17 @@ import { useEffect, useRef } from "react";
 import { GOOGLE_MAPS_API_KEY } from "../../Api/config";
 import DrivingLessonModel from "../../model/DrivingLessonModel";
 
-
 type DrivingLessonRouteMapProps = {
     drivingLesson: DrivingLessonModel;
+};
+
+type SnappedPoint = {
+    location: {
+        latitude: number;
+        longitude: number;
+    };
+    originalIndex?: number;
+    placeId?: string;
 };
 
 function DrivingLessonRouteMap({ drivingLesson }: DrivingLessonRouteMapProps) {
@@ -18,9 +26,9 @@ function DrivingLessonRouteMap({ drivingLesson }: DrivingLessonRouteMapProps) {
         const initMap = async () => {
             if (!mapRef.current) return;
 
-            const coordinatePoints = drivingLesson.route.routeCoordinates
+            const coordinatePoints = drivingLesson.route.routeCoordinates;
 
-            const path: google.maps.LatLngLiteral[] = coordinatePoints
+            const rawPath: google.maps.LatLngLiteral[] = coordinatePoints
                 .slice()
                 .sort((a, b) => a.order - b.order)
                 .map((point) => ({
@@ -29,10 +37,14 @@ function DrivingLessonRouteMap({ drivingLesson }: DrivingLessonRouteMapProps) {
                 }))
                 .filter((point) => isValidCoordinate(point.lat, point.lng));
 
-            if (path.length === 0) {
+            if (rawPath.length === 0) {
                 console.warn("No valid coordinates found.");
                 return;
             }
+
+            const snappedPath = await snapPathToRoads(rawPath);
+
+            const pathToDraw = snappedPath.length > 0 ? snappedPath : rawPath;
 
             const { setOptions, importLibrary } = await import("@googlemaps/js-api-loader");
 
@@ -46,13 +58,13 @@ function DrivingLessonRouteMap({ drivingLesson }: DrivingLessonRouteMapProps) {
             if (!mapRef.current) return;
 
             const map = new Map(mapRef.current, {
-                center: path[0],
+                center: pathToDraw[0],
                 zoom: 13,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
             });
 
             routeLine = new google.maps.Polyline({
-                path,
+                path: pathToDraw,
                 geodesic: true,
                 strokeOpacity: 1.0,
                 strokeWeight: 4,
@@ -61,14 +73,14 @@ function DrivingLessonRouteMap({ drivingLesson }: DrivingLessonRouteMapProps) {
             routeLine.setMap(map);
 
             startMarker = new google.maps.Marker({
-                position: path[0],
+                position: pathToDraw[0],
                 map,
                 label: "A",
                 title: "Start",
             });
 
             endMarker = new google.maps.Marker({
-                position: path[path.length - 1],
+                position: pathToDraw[pathToDraw.length - 1],
                 map,
                 label: "B",
                 title: "End",
@@ -76,7 +88,7 @@ function DrivingLessonRouteMap({ drivingLesson }: DrivingLessonRouteMapProps) {
 
             const bounds = new google.maps.LatLngBounds();
 
-            path.forEach((point) => {
+            pathToDraw.forEach((point) => {
                 bounds.extend(point);
             });
 
@@ -94,7 +106,60 @@ function DrivingLessonRouteMap({ drivingLesson }: DrivingLessonRouteMapProps) {
         };
     }, [drivingLesson]);
 
-    return <div ref={mapRef} style={{ width: "100%", height: "500px" }} />;
+    return <div ref={mapRef} style={{ width: "100%", height: "96vh" }} />;
+}
+
+async function snapPathToRoads(
+    path: google.maps.LatLngLiteral[]
+): Promise<google.maps.LatLngLiteral[]> {
+    if (!GOOGLE_MAPS_API_KEY) {
+        console.warn("Google Maps API key is missing.");
+        return [];
+    }
+
+    const chunks = chunkArray(path, 100);
+    const snappedFullPath: google.maps.LatLngLiteral[] = [];
+
+    for (const chunk of chunks) {
+        const pathParameter = chunk
+            .map((point) => `${point.lat},${point.lng}`)
+            .join("|");
+
+        const url =
+            `https://roads.googleapis.com/v1/snapToRoads` +
+            `?path=${encodeURIComponent(pathParameter)}` +
+            `&interpolate=true` +
+            `&key=${GOOGLE_MAPS_API_KEY}`;
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            console.error("Snap to Roads failed:", await response.text());
+            continue;
+        }
+
+        const data: { snappedPoints?: SnappedPoint[] } = await response.json();
+
+        const snappedPoints =
+            data.snappedPoints?.map((point) => ({
+                lat: point.location.latitude,
+                lng: point.location.longitude,
+            })) ?? [];
+
+        snappedFullPath.push(...snappedPoints);
+    }
+
+    return snappedFullPath;
+}
+
+function chunkArray<T>(array: T[], size: number): T[][] {
+    const chunks: T[][] = [];
+
+    for (let i = 0; i < array.length; i += size) {
+        chunks.push(array.slice(i, i + size));
+    }
+
+    return chunks;
 }
 
 function isValidCoordinate(latitude: number, longitude: number): boolean {

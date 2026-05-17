@@ -2,10 +2,11 @@
     height: 100vh;
     display: flex;
     flex-direction: column;
-    margin: 0;
+    margin-top: 11vh;
     justify-content: center;
     align-content: center;
     background-color: White;
+
 }
 
 .maps-content {

@@ -170,7 +170,7 @@ function AdminViewDrivingSchool() {
                                 </button>
 
                                 <button
-                                    className="deleteButton"
+                                    className="deletePackageButton"
                                     onClick={() => deletePackage(index)}
                                     type="button"
                                 >
