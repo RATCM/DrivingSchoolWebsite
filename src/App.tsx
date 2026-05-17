@@ -18,8 +18,8 @@ function getCookie(name: string) {
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
     const role = getCookie("role");
-
-    if (!role) {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!role || !accessToken) {
         return <Navigate to="/login" replace />;
     }
 
