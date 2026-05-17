@@ -26,6 +26,12 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
 }
 
+function logout(){
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    document.cookie = "role=; path=/; max-age=0";
+}
+
 function App() {
     return (
         <Router>
@@ -33,7 +39,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Koreskoler />} />
                 <Route path="/koreskoler" element={<Koreskoler />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/login" element={<>{logout()},<Login /></>} />
                 <Route
                     path="/min_side"
                     element={
